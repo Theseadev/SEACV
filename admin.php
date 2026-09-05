@@ -971,21 +971,171 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
         }
 
         @media (max-width: 640px) {
-            .kpi-row {
-                grid-template-columns: 1fr 1fr;
+            .admin-topbar {
+                padding: 0 12px;
+                height: 56px;
             }
 
-            .catalog-toolbar {
-                flex-direction: column;
-                align-items: stretch;
+            .topbar-left {
+                gap: 8px;
             }
 
-            .search-wrapper {
-                max-width: 100%;
+            .topbar-page-title {
+                font-size: 14.5px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 150px;
+            }
+
+            .topbar-right {
+                gap: 8px;
+            }
+
+            .btn-view-store {
+                padding: 0;
+                width: 36px;
+                height: 36px;
+                justify-content: center;
+                border-radius: 8px;
+                flex-shrink: 0;
             }
 
             .btn-view-store span {
                 display: none;
+            }
+
+            .topbar-right .btn-add-quick {
+                padding: 0;
+                width: 36px;
+                height: 36px;
+                justify-content: center;
+                border-radius: 8px;
+                flex-shrink: 0;
+            }
+
+            .topbar-right .btn-add-quick span {
+                display: none;
+            }
+
+            .admin-content {
+                padding: 16px 12px 48px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+                margin-bottom: 18px;
+            }
+
+            .page-title-group h1 {
+                font-size: 20px;
+            }
+
+            .page-title-group p {
+                font-size: 12.5px;
+                line-height: 1.4;
+            }
+
+            .page-header .btn-add-quick {
+                width: 100%;
+                justify-content: center;
+                padding: 11px 16px;
+                font-size: 14px;
+                border-radius: 10px;
+                font-weight: 600;
+                box-shadow: 0 3px 10px rgba(37, 99, 235, 0.2);
+            }
+
+            .kpi-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                margin-bottom: 18px;
+            }
+
+            .kpi-card {
+                padding: 12px 14px;
+                border-radius: 10px;
+            }
+
+            .kpi-title {
+                font-size: 10.5px;
+            }
+
+            .kpi-num {
+                font-size: 22px;
+                margin-top: 3px;
+            }
+
+            .catalog-card {
+                border-radius: 12px;
+            }
+
+            .catalog-toolbar {
+                padding: 12px;
+                gap: 10px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                gap: 6px;
+                width: 100%;
+                padding-bottom: 4px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+
+            .filter-group::-webkit-scrollbar {
+                display: none;
+            }
+
+            .filter-tab {
+                white-space: nowrap;
+                flex-shrink: 0;
+                padding: 6px 11px;
+                font-size: 12.5px;
+            }
+
+            .search-wrapper {
+                width: 100%;
+                max-width: 100%;
+                min-width: 0;
+            }
+
+            .catalog-table th, 
+            .catalog-table td {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+
+            .table-thumb {
+                width: 40px;
+                height: 54px;
+                min-width: 40px;
+            }
+
+            .td-product {
+                min-width: 180px;
+                gap: 10px;
+            }
+
+            .product-name {
+                font-size: 13px;
+            }
+
+            .td-actions {
+                gap: 4px;
+            }
+
+            .btn-edit, 
+            .btn-delete {
+                padding: 5px 9px;
+                font-size: 12px;
             }
         }
     </style>

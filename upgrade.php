@@ -944,6 +944,61 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
                 opacity: 1;
             }
         }
+
+        @media (max-width: 640px) {
+            .admin-topbar {
+                padding: 0 12px;
+                height: 56px;
+            }
+
+            .topbar-left {
+                gap: 8px;
+            }
+
+            .topbar-page-title {
+                font-size: 14.5px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 180px;
+            }
+
+            .btn-view-store {
+                padding: 0;
+                width: 36px;
+                height: 36px;
+                justify-content: center;
+                border-radius: 8px;
+                flex-shrink: 0;
+            }
+
+            .btn-view-store span {
+                display: none;
+            }
+
+            .admin-content {
+                padding: 16px 12px 48px;
+            }
+
+            .card-box {
+                padding: 18px 14px;
+                border-radius: 12px;
+            }
+
+            .terminal-window {
+                border-radius: 12px;
+                height: 420px;
+            }
+
+            .terminal-header {
+                padding: 10px 14px;
+            }
+
+            .terminal-actions button {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+        }
     </style>
 </head>
 <body class="admin-body">

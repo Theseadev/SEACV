@@ -783,6 +783,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 opacity: 1;
             }
         }
+
+        @media (max-width: 640px) {
+            .admin-topbar {
+                padding: 0 12px;
+                height: 56px;
+            }
+
+            .topbar-left {
+                gap: 8px;
+            }
+
+            .topbar-page-title {
+                font-size: 14.5px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 180px;
+            }
+
+            .btn-view-store {
+                padding: 0;
+                width: 36px;
+                height: 36px;
+                justify-content: center;
+                border-radius: 8px;
+                flex-shrink: 0;
+            }
+
+            .btn-view-store span {
+                display: none;
+            }
+
+            .admin-content {
+                padding: 16px 12px 48px;
+            }
+
+            .form-card {
+                padding: 18px 14px;
+                border-radius: 12px;
+            }
+
+            .form-card-title {
+                font-size: 18px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+                align-items: stretch;
+                gap: 8px;
+            }
+
+            .btn-submit,
+            .btn-cancel {
+                width: 100%;
+                justify-content: center;
+                padding: 11px 16px;
+            }
+        }
     </style>
 </head>
 <body class="admin-body">
