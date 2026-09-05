@@ -13,6 +13,9 @@ ini_set('display_errors', 0);
 // Autoload composer dependencies & project classes
 require_once __DIR__ . '/vendor/autoload.php';
 
+// Load configuration
+require_once __DIR__ . '/config.php';
+
 // Load shared helpers
 require_once __DIR__ . '/helpers.php';
 

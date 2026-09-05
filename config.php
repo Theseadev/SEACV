@@ -2,12 +2,10 @@
 // public/config.php
 // Smart Environment Auto-Detect:
 // Otomatis mengenali apakah berjalan di localhost (Laragon) atau di server hosting (InfinityFree)
-$isLocal = (
-    isset($_SERVER['SERVER_NAME']) && 
-    in_array($_SERVER['SERVER_NAME'], ['localhost', '127.0.0.1', 'seacv.test'])
-) || (
-    php_sapi_name() === 'cli' && empty(getenv('DB_HOST'))
-);
+$serverHost = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
+$hostName = strtolower(explode(':', $serverHost)[0]);
+$isLocal = in_array($hostName, ['localhost', '127.0.0.1', 'seacv.test', '::1'])
+    || (php_sapi_name() === 'cli' && empty(getenv('DB_HOST')));
 
 if ($isLocal && !getenv('DB_HOST')) {
     // 1. Database Lokal (Laragon)
