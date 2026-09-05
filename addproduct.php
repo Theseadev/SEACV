@@ -7,6 +7,25 @@ $error = '';
 $adminUsername = htmlspecialchars($_SESSION["username"] ?? 'Fahrul');
 $adminInitial = strtoupper(substr($adminUsername, 0, 1));
 
+// Load stats for sidebar
+$stats = ['total' => 0, 'ats' => 0, 'kreatif' => 0, 'lamaran' => 0];
+try {
+    $st = $pdo->query("SELECT COUNT(*) as total, SUM(category LIKE '%ats%') as ats, SUM(category LIKE '%kreatif%') as kreatif, SUM(category LIKE '%lamaran%') as lamaran FROM products")->fetch();
+    if ($st) {
+        $stats['total'] = (int)($st['total'] ?? 0);
+        $stats['ats'] = (int)($st['ats'] ?? 0);
+        $stats['kreatif'] = (int)($st['kreatif'] ?? 0);
+        $stats['lamaran'] = (int)($st['lamaran'] ?? 0);
+    }
+} catch (Exception $e) {}
+
+// Load version.json for sidebar repo info
+$versionFile = __DIR__ . '/version.json';
+$versionData = file_exists($versionFile) ? json_decode(file_get_contents($versionFile), true) : [];
+$sidebarRepo = $versionData['github_repo'] ?? 'Theseadev/SEACV';
+$sidebarBranch = $versionData['github_branch'] ?? 'main';
+$sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
@@ -106,8 +125,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         /* Sidebar */
         .admin-sidebar {
-            width: 250px;
-            background: var(--adm-surface);
+            width: 260px;
+            background: #ffffff;
             border-right: 1px solid var(--adm-border);
             display: flex;
             flex-direction: column;
@@ -117,20 +136,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             z-index: 100;
             flex-shrink: 0;
             transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.02);
         }
 
+        /* Collapsed State on Desktop */
         .admin-layout.sidebar-collapsed .admin-sidebar {
-            margin-left: -250px;
+            margin-left: -260px;
         }
 
         .sidebar-header {
-            height: 64px;
-            padding: 0 20px;
+            height: 68px;
+            padding: 0 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid var(--adm-border);
             flex-shrink: 0;
+            background: #ffffff;
         }
 
         .brand-link {
@@ -142,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .brand-logo {
-            height: 32px;
+            height: 34px;
             width: auto;
             object-fit: contain;
         }
@@ -152,21 +174,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 18px;
             font-weight: 800;
             letter-spacing: -0.01em;
+            line-height: 1.1;
         }
 
         .brand-text .sea { color: #0f172a; }
-        .brand-text .cv { color: var(--adm-primary); }
+        .brand-text .cv { color: #2563eb; }
 
         .brand-badge {
             font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            background: var(--adm-subtle);
-            color: var(--adm-text-sub);
-            padding: 2px 6px;
-            border-radius: var(--adm-radius-sm);
-            margin-left: 4px;
+            letter-spacing: 0.06em;
+            background: linear-gradient(135deg, #2563eb 0%, #6366f1 100%);
+            color: #ffffff;
+            padding: 2px 7px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+        }
+
+        .sidebar-server-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10.5px;
+            font-weight: 600;
+            color: #059669;
+            margin-top: 2px;
+        }
+
+        .status-pulse-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+            animation: pulseGlow 2s infinite;
         }
 
         .btn-sidebar-close {
@@ -175,8 +217,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: none;
             color: var(--adm-text-muted);
             cursor: pointer;
-            padding: 4px;
-            border-radius: 4px;
+            padding: 5px;
+            border-radius: 6px;
         }
 
         .btn-sidebar-close:hover {
@@ -184,93 +226,406 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background: var(--adm-subtle);
         }
 
+        /* Sidebar Nav Links */
         .sidebar-nav {
             flex: 1;
-            padding: 20px 14px;
+            padding: 14px 10px;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .sidebar-nav::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 999px;
         }
 
         .nav-section-title {
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 10.5px;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: var(--adm-text-muted);
-            padding: 0 10px;
-            margin-bottom: 8px;
-            margin-top: 14px;
-        }
-
-        .nav-section-title:first-child {
-            margin-top: 0;
+            letter-spacing: 0.08em;
+            color: #94a3b8;
+            padding: 0 8px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .sidebar-menu {
             list-style: none;
-            margin-bottom: 12px;
-        }
-
-        .sidebar-menu li {
-            margin-bottom: 3px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
         }
 
         .sidebar-link {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 9px 12px;
-            border-radius: var(--adm-radius-sm);
-            color: var(--adm-text-sub);
+            padding: 8px 10px;
+            border-radius: 10px;
+            color: #475569;
             text-decoration: none;
             font-size: 13.5px;
-            font-weight: 500;
-            transition: all 0.15s ease;
+            font-weight: 600;
+            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            border: 1px solid transparent;
         }
 
         .sidebar-link:hover {
-            background: var(--adm-subtle);
-            color: var(--adm-text-main);
+            background: #f8fafc;
+            color: #0f172a;
+            border-color: #f1f5f9;
         }
 
         .sidebar-link.active {
-            background: var(--adm-primary-soft);
-            color: var(--adm-primary);
-            font-weight: 600;
+            background: #f0f7ff;
+            color: #1d4ed8;
+            border-color: #dbeafe;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.05);
         }
 
-        .sidebar-icon {
-            width: 18px;
-            height: 18px;
+        /* Colorful Icon Boxes */
+        .sidebar-icon-box {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            color: inherit;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        .sidebar-link:hover .sidebar-icon-box {
+            transform: scale(1.08);
+        }
+
+        .icon-blue {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #dbeafe;
+        }
+        .sidebar-link.active .icon-blue {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+        }
+
+        .icon-emerald {
+            background: #ecfdf5;
+            color: #059669;
+            border: 1px solid #d1fae5;
+        }
+        .sidebar-link.active .icon-emerald {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 4px 10px rgba(5, 150, 105, 0.35);
+        }
+
+        .icon-purple {
+            background: #f5f3ff;
+            color: #7c3aed;
+            border: 1px solid #ede9fe;
+        }
+        .sidebar-link.active .icon-purple {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 4px 10px rgba(124, 58, 237, 0.35);
+        }
+
+        .icon-cyan {
+            background: #ecfeff;
+            color: #0891b2;
+            border: 1px solid #cffafe;
+        }
+        .sidebar-link.active .icon-cyan {
+            background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 4px 10px rgba(8, 145, 178, 0.35);
+        }
+
+        .icon-amber {
+            background: #fffbeb;
+            color: #d97706;
+            border: 1px solid #fef3c7;
+        }
+        .sidebar-link.active .icon-amber {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 4px 10px rgba(217, 119, 6, 0.35);
+        }
+
+        .icon-indigo {
+            background: #eef2ff;
+            color: #4f46e5;
+            border: 1px solid #e0e7ff;
+        }
+        .sidebar-link.active .icon-indigo {
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.35);
+        }
+
+        .icon-orange {
+            background: #fff7ed;
+            color: #ea580c;
+            border: 1px solid #ffedd5;
+        }
+
+        /* Vibrant Badges */
+        .sidebar-badge {
+            margin-left: auto;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 999px;
+            letter-spacing: 0.02em;
+        }
+
+        .badge-blue { background: #dbeafe; color: #1e40af; }
+        .badge-emerald { background: #d1fae5; color: #065f46; }
+        .badge-purple { background: #ede9fe; color: #5b21b6; }
+        .badge-cyan { background: #cffafe; color: #155e75; }
+        .badge-amber { background: #fef3c7; color: #92400e; }
+        .badge-indigo { background: #e0e7ff; color: #3730a3; }
+        .badge-orange { background: #ffedd5; color: #9a3412; }
+
+        .pulse-dot-purple {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #7c3aed;
+            margin-right: 4px;
+            box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.3);
+            animation: pulseGlow 1.8s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        /* Mini Template Composition Bar */
+        .sidebar-stat-mini {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+
+        .ssm-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .ssm-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .ssm-val {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .ssm-bar {
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+            display: flex;
+            margin-bottom: 6px;
+        }
+
+        .ssm-fill.ats { background: #06b6d4; }
+        .ssm-fill.kreatif { background: #f59e0b; }
+        .ssm-fill.lamaran { background: #6366f1; }
+
+        .ssm-legend {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10.5px;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .ssm-legend span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .ssm-legend .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .ssm-legend .dot-cyan { background: #06b6d4; }
+        .ssm-legend .dot-amber { background: #f59e0b; }
+        .ssm-legend .dot-indigo { background: #6366f1; }
+
+        /* Sidebar System Status Card */
+        .sidebar-system-card {
+            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 12px;
+            padding: 12px;
+            color: #ffffff;
+            box-shadow: 0 8px 16px -4px rgba(15, 23, 42, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin-top: auto;
+        }
+
+        .ssc-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .ssc-git-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #c084fc;
+            background: rgba(192, 132, 252, 0.12);
+            border: 1px solid rgba(192, 132, 252, 0.25);
+            padding: 2px 7px;
+            border-radius: 6px;
+        }
+
+        .ssc-status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        .ssc-repo-name {
+            font-family: var(--adm-font-mono, monospace);
+            font-size: 12px;
+            font-weight: 600;
+            color: #f8fafc;
+            letter-spacing: -0.01em;
+            margin-bottom: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .ssc-info-row {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 9px;
+            flex-wrap: wrap;
+        }
+
+        .ssc-branch-pill {
+            font-size: 10px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.1);
+            color: #cbd5e1;
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+
+        .ssc-shield-pill {
+            font-size: 10px;
+            font-weight: 600;
+            background: rgba(20, 184, 166, 0.15);
+            color: #2dd4bf;
+            padding: 1px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(45, 212, 191, 0.2);
+        }
+
+        .ssc-upgrade-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            padding: 6px 10px;
+            border-radius: 7px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 11.5px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.15s ease;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .ssc-upgrade-btn:hover {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #ffffff;
+        }
+
+        /* Sidebar Profile Footer */
         .sidebar-footer {
-            padding: 14px 16px;
+            padding: 12px 14px;
             border-top: 1px solid var(--adm-border);
             display: flex;
             align-items: center;
             gap: 10px;
-            background: #fafbfc;
+            background: #ffffff;
+            flex-shrink: 0;
+        }
+
+        .sidebar-avatar-wrapper {
+            position: relative;
             flex-shrink: 0;
         }
 
         .sidebar-avatar {
-            width: 34px;
-            height: 34px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background: var(--adm-primary-soft);
-            color: var(--adm-primary);
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 13px;
-            border: 1px solid var(--adm-primary-border);
-            flex-shrink: 0;
+            font-weight: 800;
+            font-size: 14px;
+            box-shadow: 0 3px 8px rgba(59, 130, 246, 0.25);
+        }
+
+        .sidebar-online-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 9px;
+            height: 9px;
+            background: #10b981;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
         }
 
         .sidebar-user-info {
@@ -281,7 +636,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .sidebar-user-name {
             font-size: 13px;
             font-weight: 700;
-            color: var(--adm-text-main);
+            color: #0f172a;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -289,31 +644,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .sidebar-user-role {
-            font-size: 11.5px;
-            color: var(--adm-text-muted);
-            line-height: 1.2;
+            display: inline-block;
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #7c3aed;
+            background: #f5f3ff;
+            border: 1px solid #ede9fe;
+            padding: 1px 6px;
+            border-radius: 4px;
             margin-top: 2px;
+            line-height: 1.2;
         }
 
         .btn-sidebar-logout {
             width: 32px;
             height: 32px;
-            border-radius: var(--adm-radius-sm);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--adm-text-muted);
-            border: 1px solid var(--adm-border);
-            background: var(--adm-surface);
+            color: #ef4444;
+            border: 1px solid #fecaca;
+            background: #fff5f5;
             text-decoration: none;
             transition: all 0.15s ease;
             flex-shrink: 0;
         }
 
         .btn-sidebar-logout:hover {
-            background: var(--adm-danger-soft);
-            color: var(--adm-danger);
-            border-color: var(--adm-danger-border);
+            background: #ef4444;
+            color: #ffffff;
+            border-color: #ef4444;
+            transform: scale(1.05);
         }
 
         /* Main */
@@ -731,10 +1093,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="sidebar-header">
                 <a href="admin.php" class="brand-link">
                     <img src="logo.png" alt="SeaCV Logo" class="brand-logo">
-                    <span class="brand-text">
-                        <span class="sea">SEA</span><span class="cv">CV</span>
-                    </span>
-                    <span class="brand-badge">Admin</span>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                            <span class="brand-text">
+                                <span class="sea">SEA</span><span class="cv">CV</span>
+                            </span>
+                            <span class="brand-badge">ADMIN</span>
+                        </div>
+                        <div class="sidebar-server-status">
+                            <span class="status-pulse-dot"></span>
+                            <span>Server Aktif & Online</span>
+                        </div>
+                    </div>
                 </a>
 
                 <button type="button" class="btn-sidebar-close" onclick="closeSidebarMobile()" title="Tutup Sidebar">
@@ -747,79 +1117,184 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <!-- Sidebar Navigation Links -->
             <nav class="sidebar-nav">
-                <div class="nav-section-title">Menu Utama</div>
-                <ul class="sidebar-menu">
-                    <li>
-                        <a href="admin.php" class="sidebar-link">
-                            <span class="sidebar-icon">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="3" y="3" width="7" height="7"></rect>
-                                    <rect x="14" y="3" width="7" height="7"></rect>
-                                    <rect x="14" y="14" width="7" height="7"></rect>
-                                    <rect x="3" y="14" width="7" height="7"></rect>
-                                </svg>
-                            </span>
-                            <span>Katalog Template</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="addproduct.php" class="sidebar-link active">
-                            <span class="sidebar-icon">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="12" y1="8" x2="12" y2="16"></line>
-                                    <line x1="8" y1="12" x2="16" y2="12"></line>
-                                </svg>
-                            </span>
-                            <span>Tambah Template</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="upgrade.php" class="sidebar-link">
-                            <span class="sidebar-icon">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="16 16 12 12 8 16"></polyline>
-                                    <line x1="12" y1="12" x2="12" y2="21"></line>
-                                    <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
-                                    <polyline points="16 16 12 12 8 16"></polyline>
-                                </svg>
-                            </span>
-                            <span>Pembaruan Sistem</span>
-                        </a>
-                    </li>
-                </ul>
+                <!-- Section 1: Menu Utama -->
+                <div>
+                    <div class="nav-section-title">
+                        <span>Menu Utama</span>
+                    </div>
+                    <ul class="sidebar-menu">
+                        <li>
+                            <a href="admin.php" class="sidebar-link">
+                                <span class="sidebar-icon-box icon-blue">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="7" height="7"></rect>
+                                        <rect x="14" y="3" width="7" height="7"></rect>
+                                        <rect x="14" y="14" width="7" height="7"></rect>
+                                        <rect x="3" y="14" width="7" height="7"></rect>
+                                    </svg>
+                                </span>
+                                <span>Katalog Template</span>
+                                <span class="sidebar-badge badge-blue"><?= $stats['total'] ?> item</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="addproduct.php" class="sidebar-link active">
+                                <span class="sidebar-icon-box icon-emerald">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                                    </svg>
+                                </span>
+                                <span>Tambah Template</span>
+                                <span class="sidebar-badge badge-emerald">+ Baru</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="upgrade.php" class="sidebar-link">
+                                <span class="sidebar-icon-box icon-purple">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="16 16 12 12 8 16"></polyline>
+                                        <line x1="12" y1="12" x2="12" y2="21"></line>
+                                        <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
+                                    </svg>
+                                </span>
+                                <span>Pembaruan Sistem</span>
+                                <span class="sidebar-badge badge-purple"><span class="pulse-dot-purple"></span> Git</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
-                <div class="nav-section-title">Shortcut Toko</div>
-                <ul class="sidebar-menu">
-                    <li>
-                        <a href="index.php" target="_blank" class="sidebar-link">
-                            <span class="sidebar-icon">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="2" y1="12" x2="22" y2="12"></line>
-                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path>
-                                </svg>
-                            </span>
-                            <span>Buka Toko SeaCV</span>
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: auto; opacity: 0.5;">
-                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                                <polyline points="15 3 21 3 21 9"></polyline>
-                                <line x1="10" y1="14" x2="21" y2="3"></line>
+                <!-- Section 2: Filter Cepat Kategori -->
+                <div>
+                    <div class="nav-section-title">
+                        <span>Filter Kategori</span>
+                        <span style="font-size: 9.5px; color: #94a3b8; font-weight: 600;">Cepat</span>
+                    </div>
+                    <ul class="sidebar-menu">
+                        <li>
+                            <a href="admin.php?cat=ats" class="sidebar-link">
+                                <span class="sidebar-icon-box icon-cyan">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        <polyline points="10 9 9 9 8 9"></polyline>
+                                    </svg>
+                                </span>
+                                <span>CV ATS-Friendly</span>
+                                <span class="sidebar-badge badge-cyan"><?= $stats['ats'] ?> ATS</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="admin.php?cat=kreatif" class="sidebar-link">
+                                <span class="sidebar-icon-box icon-amber">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path d="m4.93 4.93 4.24 4.24"></path>
+                                        <path d="m14.83 9.17 4.24-4.24"></path>
+                                        <path d="m14.83 14.83 4.24 4.24"></path>
+                                        <path d="m9.17 14.83-4.24 4.24"></path>
+                                    </svg>
+                                </span>
+                                <span>CV Desain Kreatif</span>
+                                <span class="sidebar-badge badge-amber"><?= $stats['kreatif'] ?> CV</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="admin.php?cat=lamaran" class="sidebar-link">
+                                <span class="sidebar-icon-box icon-indigo">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                </span>
+                                <span>Surat Lamaran</span>
+                                <span class="sidebar-badge badge-indigo"><?= $stats['lamaran'] ?> Dok</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Section 3: Ringkasan Template Progress Bar -->
+                <div class="sidebar-stat-mini">
+                    <div class="ssm-header">
+                        <span class="ssm-label">Rasio Koleksi</span>
+                        <span class="ssm-val"><?= $stats['total'] ?> Total</span>
+                    </div>
+                    <div class="ssm-bar">
+                        <div class="ssm-fill ats" style="width: <?= $stats['total'] ? round(($stats['ats'] / $stats['total']) * 100) : 0 ?>%;" title="ATS: <?= $stats['ats'] ?>"></div>
+                        <div class="ssm-fill kreatif" style="width: <?= $stats['total'] ? round(($stats['kreatif'] / $stats['total']) * 100) : 0 ?>%;" title="Kreatif: <?= $stats['kreatif'] ?>"></div>
+                        <div class="ssm-fill lamaran" style="width: <?= $stats['total'] ? round(($stats['lamaran'] / $stats['total']) * 100) : 0 ?>%;" title="Lamaran: <?= $stats['lamaran'] ?>"></div>
+                    </div>
+                    <div class="ssm-legend">
+                        <span><i class="dot dot-cyan"></i> ATS (<?= $stats['ats'] ?>)</span>
+                        <span><i class="dot dot-amber"></i> Kreatif (<?= $stats['kreatif'] ?>)</span>
+                        <span><i class="dot dot-indigo"></i> Surat (<?= $stats['lamaran'] ?>)</span>
+                    </div>
+                </div>
+
+                <!-- Section 4: Live GitHub & Hosting Card -->
+                <div class="sidebar-system-card">
+                    <div class="ssc-top">
+                        <div class="ssc-git-pill">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
                             </svg>
-                        </a>
-                    </li>
-                </ul>
+                            <span>GitHub</span>
+                        </div>
+                        <span class="ssc-status-dot" title="Terkoneksi"></span>
+                    </div>
+                    <div class="ssc-repo-name" title="<?= htmlspecialchars($sidebarRepo) ?>"><?= htmlspecialchars($sidebarRepo) ?></div>
+                    <div class="ssc-info-row">
+                        <span class="ssc-branch-pill">branch: <?= htmlspecialchars($sidebarBranch) ?></span>
+                        <span class="ssc-shield-pill">🛡️ InfinityFree</span>
+                    </div>
+                    <a href="upgrade.php" class="ssc-upgrade-btn">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                            <polyline points="16 16 12 12 8 16"></polyline>
+                            <line x1="12" y1="12" x2="12" y2="21"></line>
+                            <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
+                        </svg>
+                        <span>Pembaruan Sistem</span>
+                    </a>
+                </div>
+
+                <!-- Section 5: Shortcut Toko -->
+                <div>
+                    <div class="nav-section-title">Toko Publik</div>
+                    <ul class="sidebar-menu">
+                        <li>
+                            <a href="index.php" target="_blank" class="sidebar-link">
+                                <span class="sidebar-icon-box icon-orange">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path>
+                                    </svg>
+                                </span>
+                                <span>Buka Toko SeaCV</span>
+                                <span class="sidebar-badge badge-orange">Live ↗</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </nav>
 
             <!-- Sidebar Bottom / Admin Profile -->
             <div class="sidebar-footer">
-                <div class="sidebar-avatar"><?= $adminInitial ?></div>
+                <div class="sidebar-avatar-wrapper">
+                    <div class="sidebar-avatar"><?= $adminInitial ?></div>
+                    <span class="sidebar-online-badge"></span>
+                </div>
                 <div class="sidebar-user-info">
                     <div class="sidebar-user-name"><?= $adminUsername ?></div>
-                    <div class="sidebar-user-role">Administrator</div>
+                    <span class="sidebar-user-role">Super Admin</span>
                 </div>
                 <a href="logout.php" class="btn-sidebar-logout" title="Logout dari Admin">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                         <polyline points="16 17 21 12 16 7"></polyline>
                         <line x1="21" y1="12" x2="9" y2="12"></line>
