@@ -26,11 +26,17 @@ $categories = [];
 
 if (isset($pdo)) {
     try {
-        // Fetch distinct categories
-        $cat_stmt = $pdo->query("SELECT DISTINCT category FROM products ORDER BY category ASC");
-        $raw_categories = $cat_stmt->fetchAll();
-        foreach ($raw_categories as $c) {
-            $categories[] = $c['category'];
+        // Fetch categories from categories table if available, else from products
+        try {
+            $cat_stmt = $pdo->query("SELECT name FROM categories ORDER BY id ASC");
+            $categories = $cat_stmt->fetchAll(PDO::FETCH_COLUMN);
+        } catch (\Exception $e) {
+            $categories = [];
+        }
+
+        if (empty($categories)) {
+            $cat_stmt = $pdo->query("SELECT DISTINCT category FROM products ORDER BY category ASC");
+            $categories = $cat_stmt->fetchAll(PDO::FETCH_COLUMN);
         }
 
         // Default to 'CV Kreatif' if no category is provided
@@ -103,48 +109,50 @@ if (empty($categories)) {
     $categories = ['CV Kreatif', 'CV ATS', 'Surat Lamaran Kerja'];
 }
 
-/**
- * Helper function for clean sequential product naming:
- * e.g. CV Kreatif 01, CV Kreatif 02, CV ATS 01, Surat Lamaran 01, etc.
- */
-function resolveProductDisplayName($product, $index = 0) {
-    // 1. Check if image filename contains type and number:
-    // e.g. cvkreatif01.webp, ats07.webp, slk04.webp, Surat Lamaran 02.webp, etc.
-    $img = basename($product['image'] ?? '');
-    if (preg_match('/(cv\s*kreatif|kreatif|ats|slk|surat\s*lamaran)[\w\s_-]*?(\d+)/i', $img, $matches)) {
-        $type = strtolower($matches[1]);
-        $num = str_pad($matches[2], 2, '0', STR_PAD_LEFT);
-        if (strpos($type, 'ats') !== false) {
-            return "CV ATS " . $num;
-        } elseif (strpos($type, 'slk') !== false || strpos($type, 'lamaran') !== false) {
-            return "Surat Lamaran " . $num;
-        } else {
-            return "CV Kreatif " . $num;
+if (!function_exists('resolveProductDisplayName')) {
+    /**
+     * Helper function for clean sequential product naming:
+     * e.g. CV Kreatif 01, CV Kreatif 02, CV ATS 01, Surat Lamaran 01, etc.
+     */
+    function resolveProductDisplayName($product, $index = 0) {
+        // 1. Check if image filename contains type and number:
+        // e.g. cvkreatif01.webp, ats07.webp, slk04.webp, Surat Lamaran 02.webp, etc.
+        $img = basename($product['image'] ?? '');
+        if (preg_match('/(cv\s*kreatif|kreatif|ats|slk|surat\s*lamaran)[\w\s_-]*?(\d+)/i', $img, $matches)) {
+            $type = strtolower($matches[1]);
+            $num = str_pad($matches[2], 2, '0', STR_PAD_LEFT);
+            if (strpos($type, 'ats') !== false) {
+                return "CV ATS " . $num;
+            } elseif (strpos($type, 'slk') !== false || strpos($type, 'lamaran') !== false) {
+                return "Surat Lamaran " . $num;
+            } else {
+                return "CV Kreatif " . $num;
+            }
         }
-    }
-    
-    // 2. Check if product name in DB already has category & number:
-    $rawName = trim($product['name'] ?? '');
-    if (preg_match('/(CV\s*Kreatif|CV\s*ATS|Surat\s*Lamaran|Surat\s*Pengunduran)\s*(\d+)/i', $rawName, $matches)) {
-        $prefix = ucwords(strtolower(trim($matches[1])));
-        $num = str_pad($matches[2], 2, '0', STR_PAD_LEFT);
-        return $prefix . ' ' . $num;
-    }
+        
+        // 2. Check if product name in DB already has category & number:
+        $rawName = trim($product['name'] ?? '');
+        if (preg_match('/(CV\s*Kreatif|CV\s*ATS|Surat\s*Lamaran|Surat\s*Pengunduran)\s*(\d+)/i', $rawName, $matches)) {
+            $prefix = ucwords(strtolower(trim($matches[1])));
+            $num = str_pad($matches[2], 2, '0', STR_PAD_LEFT);
+            return $prefix . ' ' . $num;
+        }
 
-    // 3. Fallback based on category and index:
-    $cat = $product['category'] ?? '';
-    $num = str_pad($index + 1, 2, '0', STR_PAD_LEFT);
-    if (stripos($cat, 'kreatif') !== false) {
-        return "CV Kreatif " . $num;
-    } elseif (stripos($cat, 'ats') !== false) {
-        return "CV ATS " . $num;
-    } elseif (stripos($cat, 'lamaran') !== false) {
-        return "Surat Lamaran " . $num;
-    } elseif (stripos($cat, 'pengunduran') !== false) {
-        return "Surat Resign " . $num;
+        // 3. Fallback based on category and index:
+        $cat = $product['category'] ?? '';
+        $num = str_pad($index + 1, 2, '0', STR_PAD_LEFT);
+        if (stripos($cat, 'kreatif') !== false) {
+            return "CV Kreatif " . $num;
+        } elseif (stripos($cat, 'ats') !== false) {
+            return "CV ATS " . $num;
+        } elseif (stripos($cat, 'lamaran') !== false) {
+            return "Surat Lamaran " . $num;
+        } elseif (stripos($cat, 'pengunduran') !== false) {
+            return "Surat Resign " . $num;
+        }
+        
+        return !empty($rawName) ? $rawName : ($cat . ' ' . $num);
     }
-    
-    return !empty($rawName) ? $rawName : ($cat . ' ' . $num);
 }
 
 /**
@@ -1125,6 +1133,7 @@ function resolveCategoryIcon($cat) {
         }
 
         .catalog-panel-top,
+        .category-filter-guide,
         .category-pills-row {
             position: relative;
             z-index: 1;
@@ -2826,15 +2835,34 @@ function resolveCategoryIcon($cat) {
                 padding: 5px 12px;
             }
             .category-filter-guide {
-                display: flex !important;
+                position: relative;
+                z-index: 1;
+                display: inline-flex !important;
+                align-self: flex-start;
                 align-items: center;
-                gap: 6px;
+                gap: 7px;
                 font-size: 0.74rem;
                 font-weight: 700;
-                color: #93c5fd;
+                color: #ffffff;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
-                margin-bottom: 10px;
+                margin-bottom: 12px;
+                background: rgba(15, 23, 42, 0.75);
+                border: 1px solid rgba(147, 197, 253, 0.45);
+                padding: 6px 14px;
+                border-radius: 9999px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+            }
+            .category-filter-guide svg {
+                color: #60a5fa;
+                flex-shrink: 0;
+            }
+            .category-filter-guide span {
+                color: #ffffff;
+                font-weight: 700;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
             }
             .category-pills-row {
                 display: grid !important;

@@ -2,12 +2,13 @@
 // public/addproduct.php
 require_once 'auth.php';
 require_once 'config.php';
+require_once 'helpers.php';
 
 $error = '';
 $adminUsername = htmlspecialchars($_SESSION["username"] ?? 'Fahrul');
 $adminInitial = strtoupper(substr($adminUsername, 0, 1));
 
-// Load stats for sidebar
+// Load stats & categories for sidebar
 $stats = ['total' => 0, 'ats' => 0, 'kreatif' => 0, 'lamaran' => 0];
 try {
     $st = $pdo->query("SELECT COUNT(*) as total, SUM(category LIKE '%ats%') as ats, SUM(category LIKE '%kreatif%') as kreatif, SUM(category LIKE '%lamaran%') as lamaran FROM products")->fetch();
@@ -18,6 +19,15 @@ try {
         $stats['lamaran'] = (int)($st['lamaran'] ?? 0);
     }
 } catch (Exception $e) {}
+
+$sidebarCategories = getCategoriesWithCounts($pdo);
+$categoriesList = [];
+try {
+    $categoriesList = $pdo->query("SELECT name FROM categories ORDER BY id ASC")->fetchAll(PDO::FETCH_COLUMN);
+} catch (Exception $e) {}
+if (empty($categoriesList)) {
+    $categoriesList = ['CV Kreatif', 'CV ATS', 'Surat Lamaran Kerja'];
+}
 
 // Load version.json for sidebar repo info
 $versionFile = __DIR__ . '/version.json';
@@ -30,10 +40,25 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $price = trim($_POST['price'] ?? '');
-    $category = $_POST['category'] ?? '';
+    $category = trim($_POST['category'] ?? '');
+    $newCategory = trim($_POST['new_category'] ?? '');
+    
+    // Check if new category was specified
+    if ($category === '__new__' || !empty($newCategory)) {
+        if (!empty($newCategory)) {
+            $category = preg_replace('/\s+/', ' ', $newCategory);
+            // Insert into categories table if not exists
+            try {
+                $insCat = $pdo->prepare("INSERT IGNORE INTO categories (name) VALUES (?)");
+                $insCat->execute([$category]);
+            } catch (Exception $e) {}
+        } else {
+            $category = '';
+        }
+    }
     
     if (empty($name) || empty($price) || empty($category) || empty($_FILES['image']['name'])) {
-        $error = "Semua field wajib diisi dan file foto template wajib dipilih.";
+        $error = "Semua field wajib diisi (termasuk kategori) dan file foto template wajib dipilih.";
     } elseif (!is_numeric($price)) {
         $error = "Harga harus berupa angka nominal valid tanpa titik/koma.";
     } else {
@@ -592,6 +617,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
         }
 
+        .btn-new-cat-toggle {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--adm-primary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            transition: color 0.15s ease;
+        }
+
+        .btn-new-cat-toggle:hover {
+            color: var(--adm-primary-hover);
+        }
+
+        .btn-cancel-new-cat {
+            padding: 0 14px;
+            height: 42px;
+            border-radius: var(--adm-radius-sm);
+            border: 1px solid var(--adm-border);
+            background: var(--adm-subtle);
+            color: var(--adm-text-sub);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.15s ease;
+            flex-shrink: 0;
+        }
+
+        .btn-cancel-new-cat:hover {
+            background: #e2e8f0;
+            color: var(--adm-text-main);
+        }
+
         .currency-wrap {
             position: relative;
             display: flex;
@@ -943,47 +1004,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div>
                     <div class="nav-section-title">Filter Kategori</div>
                     <ul class="sidebar-menu">
-                        <li>
-                            <a href="admin.php?cat=ats" class="sidebar-link">
-                                <span class="sidebar-icon">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                        <polyline points="14 2 14 8 20 8"></polyline>
-                                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    </svg>
-                                </span>
-                                <span>CV ATS-Friendly</span>
-                                <span class="sidebar-badge"><?= $stats['ats'] ?></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="admin.php?cat=kreatif" class="sidebar-link">
-                                <span class="sidebar-icon">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <path d="m4.93 4.93 4.24 4.24"></path>
-                                        <path d="m14.83 9.17 4.24-4.24"></path>
-                                        <path d="m14.83 14.83 4.24 4.24"></path>
-                                        <path d="m9.17 14.83-4.24 4.24"></path>
-                                    </svg>
-                                </span>
-                                <span>CV Desain Kreatif</span>
-                                <span class="sidebar-badge"><?= $stats['kreatif'] ?></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="admin.php?cat=lamaran" class="sidebar-link">
-                                <span class="sidebar-icon">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                        <polyline points="22,6 12,13 2,6"></polyline>
-                                    </svg>
-                                </span>
-                                <span>Surat Lamaran</span>
-                                <span class="sidebar-badge"><?= $stats['lamaran'] ?></span>
-                            </a>
-                        </li>
+                        <?php foreach ($sidebarCategories as $sc): ?>
+                            <li>
+                                <a href="admin.php?cat=<?= urlencode(strtolower($sc['name'])) ?>" class="sidebar-link">
+                                    <span class="sidebar-icon">
+                                        <?= getCategoryIconSvg($sc['name']) ?>
+                                    </span>
+                                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<?= htmlspecialchars($sc['name']) ?>"><?= htmlspecialchars($sc['name']) ?></span>
+                                    <span class="sidebar-badge"><?= (int)$sc['count'] ?></span>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
                     </ul>
                 </div>
 
@@ -1095,13 +1126,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="form-label" for="category">Kategori Template</label>
-                                    <select id="category" name="category" class="form-select" required>
-                                        <option value="">-- Pilih Kategori --</option>
-                                        <option value="CV Kreatif" <?= (isset($category) && $category === 'CV Kreatif') ? 'selected' : '' ?>>CV Kreatif</option>
-                                        <option value="CV ATS" <?= (isset($category) && $category === 'CV ATS') ? 'selected' : '' ?>>CV ATS Friendly</option>
-                                        <option value="Surat Lamaran Kerja" <?= (isset($category) && $category === 'Surat Lamaran Kerja') ? 'selected' : '' ?>>Surat Lamaran Kerja</option>
-                                    </select>
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px;">
+                                        <label class="form-label" for="category" style="margin-bottom: 0;">Kategori Template</label>
+                                        <button type="button" class="btn-new-cat-toggle" id="btnToggleNewCategory" onclick="toggleNewCategoryMode(true)">+ Tambah Kategori Baru</button>
+                                    </div>
+
+                                    <!-- Regular Category Select -->
+                                    <div id="categorySelectWrap">
+                                        <select id="category" name="category" class="form-select" onchange="handleCategorySelectChange(this)" required>
+                                            <option value="">-- Pilih Kategori --</option>
+                                            <?php foreach ($categoriesList as $catItem): ?>
+                                                <option value="<?= htmlspecialchars($catItem) ?>" <?= (isset($category) && $category === $catItem) ? 'selected' : '' ?>>
+                                                    <?= htmlspecialchars($catItem) ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                            <option value="__new__" style="color: var(--adm-primary); font-weight: 700;">+ Buat Kategori Baru...</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Inline New Category Input -->
+                                    <div id="newCategoryWrap" style="display: none; margin-top: 10px;">
+                                        <div style="display: flex; gap: 8px;">
+                                            <input type="text" id="new_category" name="new_category" class="form-input" placeholder="Ketik nama kategori baru (cth: Portofolio Desain)" maxlength="100">
+                                            <button type="button" class="btn-cancel-new-cat" onclick="toggleNewCategoryMode(false)">Batal</button>
+                                        </div>
+                                        <span class="form-hint">Kategori baru akan otomatis tersimpan dan dapat dipakai template lainnya.</span>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -1230,6 +1280,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             imagePreviewBox.style.display = 'none';
             dropzoneContainer.style.display = 'block';
         });
+
+        // Dynamic Category Handler
+        function toggleNewCategoryMode(isNew) {
+            const newWrap = document.getElementById('newCategoryWrap');
+            const catSelect = document.getElementById('category');
+            const newCatInput = document.getElementById('new_category');
+            
+            if (isNew) {
+                catSelect.value = '__new__';
+                catSelect.removeAttribute('required');
+                newCatInput.setAttribute('required', 'required');
+                newWrap.style.display = 'block';
+                newCatInput.focus();
+            } else {
+                catSelect.value = '';
+                catSelect.setAttribute('required', 'required');
+                newCatInput.removeAttribute('required');
+                newWrap.style.display = 'none';
+                newCatInput.value = '';
+            }
+        }
+
+        function handleCategorySelectChange(select) {
+            if (select.value === '__new__') {
+                toggleNewCategoryMode(true);
+            } else {
+                const newWrap = document.getElementById('newCategoryWrap');
+                const newCatInput = document.getElementById('new_category');
+                select.setAttribute('required', 'required');
+                newCatInput.removeAttribute('required');
+                newWrap.style.display = 'none';
+                newCatInput.value = '';
+            }
+        }
     </script>
 </body>
 </html>

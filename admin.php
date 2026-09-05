@@ -8,7 +8,17 @@ require_once "helpers.php";
 $stmt = $pdo->query("SELECT * FROM products ORDER BY id DESC");
 $products = $stmt->fetchAll();
 
-// Calculate category counts
+// Fetch dynamic categories with product counts
+$categoriesList = getCategoriesWithCounts($pdo);
+if (empty($categoriesList)) {
+    $categoriesList = [
+        ['id' => 1, 'name' => 'CV Kreatif', 'count' => 0],
+        ['id' => 2, 'name' => 'CV ATS', 'count' => 0],
+        ['id' => 3, 'name' => 'Surat Lamaran Kerja', 'count' => 0]
+    ];
+}
+
+// Calculate category counts map
 $stats = [
     'total' => count($products),
     'kreatif' => 0,
@@ -16,14 +26,14 @@ $stats = [
     'lamaran' => 0
 ];
 
-foreach ($products as $p) {
-    $cat = strtolower($p['category']);
-    if (strpos($cat, 'kreatif') !== false) {
-        $stats['kreatif']++;
-    } elseif (strpos($cat, 'ats') !== false) {
-        $stats['ats']++;
-    } elseif (strpos($cat, 'lamaran') !== false) {
-        $stats['lamaran']++;
+foreach ($categoriesList as $cItem) {
+    $cNameLower = strtolower($cItem['name']);
+    if (strpos($cNameLower, 'kreatif') !== false) {
+        $stats['kreatif'] = (int)$cItem['count'];
+    } elseif (strpos($cNameLower, 'ats') !== false) {
+        $stats['ats'] = (int)$cItem['count'];
+    } elseif (strpos($cNameLower, 'lamaran') !== false) {
+        $stats['lamaran'] = (int)$cItem['count'];
     }
 }
 
@@ -465,6 +475,35 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
             background: var(--adm-primary-hover);
         }
 
+        .btn-manage-cat {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 15px;
+            border-radius: var(--adm-radius-sm);
+            background: var(--adm-surface);
+            border: 1px solid var(--adm-border);
+            color: var(--adm-text-sub);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+        }
+
+        .btn-manage-cat:hover {
+            background: var(--adm-subtle);
+            border-color: #cbd5e1;
+            color: var(--adm-primary);
+        }
+
+        .page-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
         /* Main Scrollable Content */
         .admin-content {
             padding: 28px 24px 60px;
@@ -503,7 +542,7 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
            -------------------------------------------------------------------------- */
         .kpi-row {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 16px;
             margin-bottom: 24px;
         }
@@ -608,6 +647,29 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
             border-radius: 999px;
             background: rgba(0, 0, 0, 0.05);
         }
+
+        .filter-tab-add {
+            padding: 6px 12px;
+            border-radius: var(--adm-radius-sm);
+            border: 1px dashed var(--adm-primary);
+            background: var(--adm-primary-soft);
+            color: var(--adm-primary);
+            font-family: var(--adm-font);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .filter-tab-add:hover {
+            background: #dbeafe;
+            border-color: #1d4ed8;
+            color: #1d4ed8;
+        }
+
 
         /* Search Box */
         .search-wrapper {
@@ -1057,13 +1119,26 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
                 line-height: 1.4;
             }
 
-            .page-header .btn-add-quick {
+            .page-header-actions {
+                width: 100%;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .page-header-actions .btn-manage-cat,
+            .page-header-actions .btn-add-quick {
                 width: 100%;
                 justify-content: center;
-                padding: 11px 16px;
-                font-size: 14px;
-                border-radius: 10px;
+                padding: 10px 8px;
+                font-size: 12.5px;
+                border-radius: 8px;
                 font-weight: 600;
+                box-sizing: border-box;
+                text-align: center;
+            }
+
+            .page-header-actions .btn-add-quick {
                 box-shadow: 0 3px 10px rgba(37, 99, 235, 0.2);
             }
 
@@ -1351,49 +1426,22 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
 
                 <!-- Section: Filter Kategori -->
                 <div>
-                    <div class="nav-section-title">Filter Kategori</div>
+                    <div class="nav-section-title" style="display: flex; align-items: center; justify-content: space-between;">
+                        <span>Filter Kategori</span>
+                        <button type="button" onclick="openManageCategoriesModal()" style="background:none; border:none; color:var(--adm-primary); font-size:11px; font-weight:700; cursor:pointer; padding:0;" title="Kelola Kategori">+ Kelola</button>
+                    </div>
                     <ul class="sidebar-menu">
-                        <li>
-                            <a href="admin.php?cat=ats" onclick="if(typeof filterByCategory === 'function'){ event.preventDefault(); filterByCategory('ats'); }" class="sidebar-link">
-                                <span class="sidebar-icon">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                        <polyline points="14 2 14 8 20 8"></polyline>
-                                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    </svg>
-                                </span>
-                                <span>CV ATS-Friendly</span>
-                                <span class="sidebar-badge"><?= $stats['ats'] ?></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="admin.php?cat=kreatif" onclick="if(typeof filterByCategory === 'function'){ event.preventDefault(); filterByCategory('kreatif'); }" class="sidebar-link">
-                                <span class="sidebar-icon">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <path d="m4.93 4.93 4.24 4.24"></path>
-                                        <path d="m14.83 9.17 4.24-4.24"></path>
-                                        <path d="m14.83 14.83 4.24 4.24"></path>
-                                        <path d="m9.17 14.83-4.24 4.24"></path>
-                                    </svg>
-                                </span>
-                                <span>CV Desain Kreatif</span>
-                                <span class="sidebar-badge"><?= $stats['kreatif'] ?></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="admin.php?cat=lamaran" onclick="if(typeof filterByCategory === 'function'){ event.preventDefault(); filterByCategory('lamaran'); }" class="sidebar-link">
-                                <span class="sidebar-icon">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                        <polyline points="22,6 12,13 2,6"></polyline>
-                                    </svg>
-                                </span>
-                                <span>Surat Lamaran</span>
-                                <span class="sidebar-badge"><?= $stats['lamaran'] ?></span>
-                            </a>
-                        </li>
+                        <?php foreach ($categoriesList as $sc): ?>
+                            <li>
+                                <a href="admin.php?cat=<?= urlencode(strtolower($sc['name'])) ?>" onclick="if(typeof filterByCategory === 'function'){ event.preventDefault(); filterByCategory('<?= htmlspecialchars(addslashes(strtolower(trim($sc['name'])))) ?>'); }" class="sidebar-link">
+                                    <span class="sidebar-icon">
+                                        <?= getCategoryIconSvg($sc['name']) ?>
+                                    </span>
+                                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<?= htmlspecialchars($sc['name']) ?>"><?= htmlspecialchars($sc['name']) ?></span>
+                                    <span class="sidebar-badge"><?= (int)$sc['count'] ?></span>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
                     </ul>
                 </div>
 
@@ -1483,33 +1531,35 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
                         <p>Kelola semua template CV & surat lamaran kerja yang ditampilkan di toko SeaCV.</p>
                     </div>
 
-                    <a href="addproduct.php" class="btn-add-quick" style="padding: 9px 18px; font-size: 13.5px;">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        <span>Tambah Template Baru</span>
-                    </a>
+                    <div class="page-header-actions">
+                        <button type="button" class="btn-manage-cat" onclick="openManageCategoriesModal()">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 5v14M5 12h14"></path>
+                            </svg>
+                            <span>Kelola Kategori</span>
+                        </button>
+                        <a href="addproduct.php" class="btn-add-quick" style="padding: 9px 18px; font-size: 13.5px;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            <span>Tambah Template Baru</span>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- KPI Metric Tiles -->
                 <div class="kpi-row">
                     <div class="kpi-card active" data-cat="all" onclick="filterByCategory('all')">
                         <span class="kpi-title">Total Template</span>
-                        <span class="kpi-num"><?= $stats['total'] ?></span>
+                        <span class="kpi-num"><?= count($products) ?></span>
                     </div>
-                    <div class="kpi-card" data-cat="kreatif" onclick="filterByCategory('kreatif')">
-                        <span class="kpi-title">CV Kreatif</span>
-                        <span class="kpi-num"><?= $stats['kreatif'] ?></span>
-                    </div>
-                    <div class="kpi-card" data-cat="ats" onclick="filterByCategory('ats')">
-                        <span class="kpi-title">CV ATS</span>
-                        <span class="kpi-num"><?= $stats['ats'] ?></span>
-                    </div>
-                    <div class="kpi-card" data-cat="lamaran" onclick="filterByCategory('lamaran')">
-                        <span class="kpi-title">Surat Lamaran</span>
-                        <span class="kpi-num"><?= $stats['lamaran'] ?></span>
-                    </div>
+                    <?php foreach ($categoriesList as $cItem): ?>
+                        <div class="kpi-card" data-cat="<?= htmlspecialchars(strtolower(trim($cItem['name']))) ?>" onclick="filterByCategory('<?= htmlspecialchars(addslashes(strtolower(trim($cItem['name'])))) ?>')">
+                            <span class="kpi-title" title="<?= htmlspecialchars($cItem['name']) ?>"><?= htmlspecialchars($cItem['name']) ?></span>
+                            <span class="kpi-num"><?= (int)$cItem['count'] ?></span>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
 
                 <!-- Product Table Card -->
@@ -1518,16 +1568,19 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
                     <div class="catalog-toolbar">
                         <div class="filter-group">
                             <button type="button" class="filter-tab active" data-category="all" onclick="filterByCategory('all')">
-                                Semua <span class="filter-count"><?= $stats['total'] ?></span>
+                                Semua <span class="filter-count"><?= count($products) ?></span>
                             </button>
-                            <button type="button" class="filter-tab" data-category="kreatif" onclick="filterByCategory('kreatif')">
-                                CV Kreatif <span class="filter-count"><?= $stats['kreatif'] ?></span>
-                            </button>
-                            <button type="button" class="filter-tab" data-category="ats" onclick="filterByCategory('ats')">
-                                CV ATS <span class="filter-count"><?= $stats['ats'] ?></span>
-                            </button>
-                            <button type="button" class="filter-tab" data-category="lamaran" onclick="filterByCategory('lamaran')">
-                                Surat Lamaran <span class="filter-count"><?= $stats['lamaran'] ?></span>
+                            <?php foreach ($categoriesList as $cItem): ?>
+                                <button type="button" class="filter-tab" data-category="<?= htmlspecialchars(strtolower(trim($cItem['name']))) ?>" onclick="filterByCategory('<?= htmlspecialchars(addslashes(strtolower(trim($cItem['name'])))) ?>')">
+                                    <?= htmlspecialchars($cItem['name']) ?> <span class="filter-count"><?= (int)$cItem['count'] ?></span>
+                                </button>
+                            <?php endforeach; ?>
+                            <button type="button" class="filter-tab-add" onclick="openManageCategoriesModal()" title="Kelola atau Tambah Kategori">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                <span>Kategori</span>
                             </button>
                         </div>
 
@@ -1557,19 +1610,13 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
                                 <?php foreach ($products as $idx => $product): ?>
                                     <?php
                                         $displayName = resolveProductDisplayName($product, $idx);
-                                        $cat = $product['category'];
-                                        $catKey = 'kreatif';
-                                        if (stripos($cat, 'ats') !== false) {
-                                            $catKey = 'ats';
-                                        } elseif (stripos($cat, 'lamaran') !== false) {
-                                            $catKey = 'lamaran';
-                                        }
+                                        $catRaw = trim($product['category']);
                                     ?>
                                     <tr class="product-row"
                                         data-id="<?= $product['id'] ?>"
                                         data-name="<?= strtolower(htmlspecialchars($displayName)) ?>"
                                         data-raw="<?= strtolower(htmlspecialchars($product['name'])) ?>"
-                                        data-category="<?= $catKey ?>">
+                                        data-category="<?= strtolower(htmlspecialchars($catRaw)) ?>">
                                         <td class="td-id">#<?= $product['id'] ?></td>
                                         <td>
                                             <div class="td-product">
@@ -1727,10 +1774,18 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
                 const name = row.getAttribute('data-name') || '';
                 const raw = row.getAttribute('data-raw') || '';
                 const id = row.getAttribute('data-id') || '';
-                const cat = row.getAttribute('data-category') || '';
+                const cat = (row.getAttribute('data-category') || '').toLowerCase();
 
-                const matchCat = (currentCat === 'all' || cat === currentCat);
-                const matchQuery = (!q || name.includes(q) || raw.includes(q) || id.includes(q));
+                let matchCat = false;
+                if (currentCat === 'all') {
+                    matchCat = true;
+                } else if (cat === currentCat) {
+                    matchCat = true;
+                } else if (cat.includes(currentCat) || currentCat.includes(cat)) {
+                    matchCat = true;
+                }
+
+                const matchQuery = (!q || name.includes(q) || raw.includes(q) || id.includes(q) || cat.includes(q));
 
                 if (matchCat && matchQuery) {
                     row.style.display = '';
@@ -1752,14 +1807,16 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
         }
 
         function filterByCategory(cat) {
-            currentCat = cat;
+            currentCat = (cat || 'all').toLowerCase();
             
             filterTabs.forEach(tab => {
-                tab.classList.toggle('active', tab.getAttribute('data-category') === cat);
+                const tabCat = (tab.getAttribute('data-category') || '').toLowerCase();
+                tab.classList.toggle('active', tabCat === currentCat);
             });
 
             kpiCards.forEach(card => {
-                card.classList.toggle('active', card.getAttribute('data-cat') === cat);
+                const cardCat = (card.getAttribute('data-cat') || '').toLowerCase();
+                card.classList.toggle('active', cardCat === currentCat);
             });
 
             runFilter();
@@ -1780,8 +1837,189 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
         // Auto filter from URL query param if present
         const urlParams = new URLSearchParams(window.location.search);
         const catParam = urlParams.get('cat') || urlParams.get('kategori');
-        if (catParam && ['ats', 'kreatif', 'lamaran', 'all'].includes(catParam.toLowerCase())) {
-            filterByCategory(catParam.toLowerCase());
+        if (catParam) {
+            filterByCategory(catParam.trim().toLowerCase());
+        }
+
+        // --------------------------------------------------------------------------
+        // Dynamic Category Management Modal (SweetAlert2)
+        // --------------------------------------------------------------------------
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>"']/g, function(m) {
+                return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m];
+            });
+        }
+
+        async function openManageCategoriesModal() {
+            try {
+                Swal.fire({
+                    title: 'Memuat kategori...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+
+                const res = await fetch('api_category.php?action=list');
+                const data = await res.json();
+                if (!data.success) throw new Error(data.message || 'Gagal memuat kategori');
+
+                renderCategoryManager(data.categories);
+            } catch (err) {
+                Swal.fire('Error', err.message || 'Gagal memuat kategori', 'error');
+            }
+        }
+
+        function renderCategoryManager(categories) {
+            let listHtml = '';
+            if (categories && categories.length > 0) {
+                categories.forEach(c => {
+                    const pCount = parseInt(c.product_count, 10) || 0;
+                    const canDelete = pCount === 0;
+                    listHtml += `
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                <span style="font-size: 13.5px; font-weight: 600; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(c.name)}</span>
+                                <span style="font-size: 11px; background: #e2e8f0; color: #475569; padding: 1px 7px; border-radius: 999px; font-weight: 700; flex-shrink: 0;">${pCount} template</span>
+                            </div>
+                            ${canDelete ? `
+                                <button type="button" onclick="deleteCategory(${c.id}, '${escapeHtml(c.name)}')" style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 4px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 700; cursor: pointer; flex-shrink: 0; transition: all 0.15s ease;">Hapus</button>
+                            ` : `
+                                <span style="font-size: 11px; color: #94a3b8; font-weight: 600; flex-shrink: 0;">Aktif Digunakan</span>
+                            `}
+                        </div>
+                    `;
+                });
+            } else {
+                listHtml = '<div style="text-align: center; color: #94a3b8; padding: 16px;">Belum ada kategori.</div>';
+            }
+
+            const modalHtml = `
+                <div style="text-align: left;">
+                    <div style="margin-bottom: 14px;">
+                        <label style="display: block; font-size: 12.5px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">Tambah Kategori Baru:</label>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="text" id="newCatInput" style="flex: 1; height: 40px; padding: 0 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 13.5px; box-sizing: border-box;" placeholder="Contoh: Portofolio Desain, CV Fresh Grad..." maxlength="100">
+                            <button type="button" id="btnSubmitNewCat" onclick="submitNewCategory()" style="padding: 0 16px; height: 40px; border-radius: 6px; background: #2563eb; color: #fff; border: none; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0;">+ Tambah</button>
+                        </div>
+                        <div id="newCatError" style="font-size: 12px; color: #dc2626; margin-top: 5px; display: none;"></div>
+                    </div>
+
+                    <div style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin: 18px 0 8px;">Daftar Kategori Tersedia (${categories.length})</div>
+                    <div style="display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto; padding-right: 2px;">
+                        ${listHtml}
+                    </div>
+                </div>
+            `;
+
+            Swal.fire({
+                title: 'Kelola Kategori Template',
+                html: modalHtml,
+                showConfirmButton: true,
+                confirmButtonText: 'Tutup & Simpan',
+                confirmButtonColor: '#2563eb',
+                width: 520,
+                didOpen: () => {
+                    const input = document.getElementById('newCatInput');
+                    if (input) {
+                        input.focus();
+                        input.addEventListener('keydown', (e) => {
+                            if (e.key === 'Enter') {
+                                e.preventDefault();
+                                submitNewCategory();
+                            }
+                        });
+                    }
+                }
+            }).then(() => {
+                window.location.reload();
+            });
+        }
+
+        async function submitNewCategory() {
+            const input = document.getElementById('newCatInput');
+            const errDiv = document.getElementById('newCatError');
+            const btn = document.getElementById('btnSubmitNewCat');
+            if (!input) return;
+
+            const name = input.value.trim();
+            if (!name) {
+                errDiv.textContent = 'Nama kategori tidak boleh kosong.';
+                errDiv.style.display = 'block';
+                return;
+            }
+
+            errDiv.style.display = 'none';
+            btn.disabled = true;
+            btn.textContent = 'Menyimpan...';
+
+            try {
+                const formData = new FormData();
+                formData.append('action', 'add');
+                formData.append('name', name);
+
+                const res = await fetch('api_category.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+
+                if (!data.success) {
+                    errDiv.textContent = data.message || 'Gagal menambahkan kategori';
+                    errDiv.style.display = 'block';
+                    btn.disabled = false;
+                    btn.textContent = '+ Tambah';
+                    return;
+                }
+
+                // Refresh categories list inside modal
+                const listRes = await fetch('api_category.php?action=list');
+                const listData = await listRes.json();
+                renderCategoryManager(listData.categories);
+            } catch (e) {
+                errDiv.textContent = 'Terjadi kesalahan: ' + e.message;
+                errDiv.style.display = 'block';
+                btn.disabled = false;
+                btn.textContent = '+ Tambah';
+            }
+        }
+
+        async function deleteCategory(id, name) {
+            const confirm = await Swal.fire({
+                title: 'Hapus Kategori?',
+                text: `Hapus kategori "${name}"? Kategori ini sedang tidak memiliki produk.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal'
+            });
+
+            if (!confirm.isConfirmed) return;
+
+            try {
+                const formData = new FormData();
+                formData.append('action', 'delete');
+                formData.append('id', id);
+
+                const res = await fetch('api_category.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+
+                if (!data.success) {
+                    Swal.fire('Gagal', data.message || 'Gagal menghapus kategori', 'error');
+                    return;
+                }
+
+                // Refresh categories list inside modal
+                const listRes = await fetch('api_category.php?action=list');
+                const listData = await listRes.json();
+                renderCategoryManager(listData.categories);
+            } catch (e) {
+                Swal.fire('Error', 'Terjadi kesalahan: ' + e.message, 'error');
+            }
         }
     </script>
 </body>

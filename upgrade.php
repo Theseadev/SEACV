@@ -2,6 +2,7 @@
 // public/upgrade.php
 require_once "auth.php";
 require_once "config.php";
+require_once "helpers.php";
 
 $adminUsername = htmlspecialchars($_SESSION["username"] ?? 'Fahrul');
 $adminInitial = strtoupper(substr($adminUsername, 0, 1));
@@ -32,6 +33,8 @@ try {
         $stats['lamaran'] = (int)($st['lamaran'] ?? 0);
     }
 } catch (Exception $e) {}
+
+$sidebarCategories = getCategoriesWithCounts($pdo);
 
 $sidebarRepo = $versionData['github_repo'] ?? 'Theseadev/SEACV';
 $sidebarBranch = $versionData['github_branch'] ?? 'main';
@@ -1096,47 +1099,17 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
                 <div>
                     <div class="nav-section-title">Filter Kategori</div>
                     <ul class="sidebar-menu">
-                        <li>
-                            <a href="admin.php?cat=ats" class="sidebar-link">
-                                <span class="sidebar-icon">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                        <polyline points="14 2 14 8 20 8"></polyline>
-                                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    </svg>
-                                </span>
-                                <span>CV ATS-Friendly</span>
-                                <span class="sidebar-badge"><?= $stats['ats'] ?></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="admin.php?cat=kreatif" class="sidebar-link">
-                                <span class="sidebar-icon">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <path d="m4.93 4.93 4.24 4.24"></path>
-                                        <path d="m14.83 9.17 4.24-4.24"></path>
-                                        <path d="m14.83 14.83 4.24 4.24"></path>
-                                        <path d="m9.17 14.83-4.24 4.24"></path>
-                                    </svg>
-                                </span>
-                                <span>CV Desain Kreatif</span>
-                                <span class="sidebar-badge"><?= $stats['kreatif'] ?></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="admin.php?cat=lamaran" class="sidebar-link">
-                                <span class="sidebar-icon">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                        <polyline points="22,6 12,13 2,6"></polyline>
-                                    </svg>
-                                </span>
-                                <span>Surat Lamaran</span>
-                                <span class="sidebar-badge"><?= $stats['lamaran'] ?></span>
-                            </a>
-                        </li>
+                        <?php foreach ($sidebarCategories as $sc): ?>
+                            <li>
+                                <a href="admin.php?cat=<?= urlencode(strtolower($sc['name'])) ?>" class="sidebar-link">
+                                    <span class="sidebar-icon">
+                                        <?= getCategoryIconSvg($sc['name']) ?>
+                                    </span>
+                                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<?= htmlspecialchars($sc['name']) ?>"><?= htmlspecialchars($sc['name']) ?></span>
+                                    <span class="sidebar-badge"><?= (int)$sc['count'] ?></span>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
                     </ul>
                 </div>
 
