@@ -4,7 +4,13 @@
     # Prevent directory listing
     Options -Indexes
 
-    # Allow direct access to existing files and directories (css, js, images, uploads)
+    # Legacy asset rewrites to new assets/ folder
+    RewriteRule ^(logo\.png|batik-.*|.*-pattern\.svg)$ assets/images/$1 [L]
+    RewriteRule ^(admin\.css|style\.css)$ assets/css/$1 [L]
+    RewriteRule ^(script\.js)$ assets/js/$1 [L]
+    RewriteRule ^banner/(.*)$ assets/banner/$1 [L]
+
+    # Allow direct access to existing files and directories (assets, uploads, etc.)
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
 

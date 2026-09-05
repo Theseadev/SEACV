@@ -103,10 +103,22 @@ if (!function_exists('url')) {
 
 if (!function_exists('asset')) {
     /**
-     * Generate URL for static assets
+     * Generate URL for static assets (with auto-resolution to assets subdirectories)
      */
     function asset($path = '') {
-        return url($path);
+        $clean = ltrim(trim($path), '/');
+        if (!str_starts_with($clean, 'assets/') && !str_starts_with($clean, 'uploads/')) {
+            if (preg_match('/\.(css)$/i', $clean) && file_exists(__DIR__ . '/assets/css/' . $clean)) {
+                $clean = 'assets/css/' . $clean;
+            } elseif (preg_match('/\.(js)$/i', $clean) && file_exists(__DIR__ . '/assets/js/' . $clean)) {
+                $clean = 'assets/js/' . $clean;
+            } elseif (preg_match('/\.(png|jpg|jpeg|svg|gif|webp)$/i', $clean) && file_exists(__DIR__ . '/assets/images/' . $clean)) {
+                $clean = 'assets/images/' . $clean;
+            } elseif (str_starts_with($clean, 'banner/') && file_exists(__DIR__ . '/assets/' . $clean)) {
+                $clean = 'assets/' . $clean;
+            }
+        }
+        return url($clean);
     }
 }
 
