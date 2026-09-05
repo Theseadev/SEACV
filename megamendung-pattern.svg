@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="200" viewBox="0 0 360 200">
+  <defs>
+    <g id="megamendung-cloud">
+      <path d="M 0,55 C 15,30 35,22 55,28 C 70,8 100,5 120,20 C 135,5 170,8 185,25 C 205,15 235,22 245,42 C 270,35 295,48 300,68 C 275,80 245,74 220,70 C 180,72 150,78 115,72 C 75,76 40,70 0,55 Z" fill="none" stroke="#2563eb" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.65"/>
+      <path d="M 12,54 C 24,35 40,29 57,34 C 70,18 95,16 112,28 C 126,16 155,18 168,31 C 186,24 210,29 220,44 C 242,39 262,49 268,64 C 245,72 222,67 200,64 C 168,65 140,70 110,65 C 75,68 45,63 12,54 Z" fill="none" stroke="#0ea5e9" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+      <path d="M 25,53 C 34,40 48,35 60,39 C 72,28 90,26 104,35 C 118,26 140,28 152,37 C 168,32 188,36 196,47 C 215,44 230,51 236,61 C 218,66 200,62 180,60 C 152,61 130,64 105,60 C 75,62 50,59 25,53 Z" fill="none" stroke="#38bdf8" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+      <path d="M 40,51 C 48,43 58,40 68,43 C 78,35 92,34 102,40 C 114,35 130,36 138,42 C 150,38 165,42 172,49 C 186,47 198,53 204,58 C 190,61 176,58 160,56 C 138,57 120,59 100,56 C 78,57 60,55 40,51 Z" fill="none" stroke="#93c5fd" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+      <path d="M 58,49 C 66,45 74,44 82,46 C 92,42 102,41 110,45 C 120,42 132,43 138,47 C 146,45 156,47 160,51 C 150,54 138,53 125,51 C 110,52 95,53 82,51 C 72,52 64,51 58,49 Z" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.95"/>
+      <path d="M 236,61 C 255,60 278,54 295,48 C 282,58 265,65 245,69 Z" fill="#38bdf8" opacity="0.75"/>
+      <path d="M 204,58 C 220,56 240,52 254,47 C 242,54 228,59 212,62 Z" fill="#ffffff" opacity="0.85"/>
+      <circle cx="95" cy="50" r="2" fill="#ffffff" opacity="0.9"/>
+      <circle cx="103" cy="49" r="1.5" fill="#38bdf8" opacity="0.9"/>
+      <circle cx="132" cy="50" r="1.8" fill="#ffffff" opacity="0.9"/>
+      <circle cx="170" cy="53" r="1.5" fill="#bae6fd" opacity="0.8"/>
+    </g>
+    <g id="megamendung-small">
+      <path d="M 0,25 C 10,12 25,10 38,15 C 48,6 68,5 80,14 C 92,7 110,10 120,22 C 105,28 90,26 75,24 C 55,26 35,28 15,26 Z" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+      <path d="M 8,24 C 16,16 26,14 36,18 C 45,12 58,11 68,17 C 76,13 88,15 95,22 C 82,25 70,23 58,22 C 42,23 25,25 8,24 Z" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.85"/>
+    </g>
+  </defs>
+  <use href="#megamendung-cloud" x="-40" y="-10" transform="scale(0.95)" />
+  <use href="#megamendung-cloud" x="120" y="75" transform="scale(0.9)" />
+  <use href="#megamendung-cloud" x="320" y="-10" transform="scale(0.95)" />
+  <use href="#megamendung-cloud" x="-240" y="75" transform="scale(0.9)" />
+  <use href="#megamendung-small" x="180" y="15" />
+  <use href="#megamendung-small" x="10" y="125" />
+  <use href="#megamendung-small" x="370" y="125" />
+  <circle cx="85" cy="110" r="1.5" fill="#38bdf8" opacity="0.5"/>
+  <circle cx="210" cy="170" r="2" fill="#93c5fd" opacity="0.6"/>
+  <circle cx="315" cy="40" r="1.5" fill="#ffffff" opacity="0.7"/>
+  <circle cx="160" cy="90" r="1.2" fill="#7dd3fc" opacity="0.5"/>
+  <circle cx="30" cy="180" r="1.8" fill="#38bdf8" opacity="0.6"/>
+</svg>

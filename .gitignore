@@ -1,0 +1,14 @@
+# Temporary updater files
+temp_update_*.zip
+temp_extract_*/
+cookie.txt
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor & IDE settings
+.vscode/
+.idea/

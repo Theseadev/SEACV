@@ -1,0 +1,102 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+  <defs>
+    <style>
+      .b-line { fill: none; stroke: #ffffff; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+      .b-inner { fill: none; stroke: #ffffff; stroke-width: 0.9; stroke-dasharray: 2, 2.5; }
+      .b-accent { fill: #ffffff; }
+    </style>
+  </defs>
+  <g opacity="0.9">
+    <path class="b-line" d="M 60,60 C 46,45 46,25 60,18 C 74,25 74,45 60,60 Z" />
+    <path class="b-inner" d="M 60,54 C 50,43 50,29 60,24 C 70,29 70,43 60,54 Z" />
+    <circle class="b-accent" cx="60" cy="38" r="2.2" />
+    <circle class="b-accent" cx="60" cy="30" r="1.4" />
+
+    <path class="b-line" d="M 60,60 C 46,75 46,95 60,102 C 74,95 74,75 60,60 Z" />
+    <path class="b-inner" d="M 60,66 C 50,77 50,91 60,96 C 70,91 70,77 60,66 Z" />
+    <circle class="b-accent" cx="60" cy="82" r="2.2" />
+    <circle class="b-accent" cx="60" cy="90" r="1.4" />
+
+    <path class="b-line" d="M 60,60 C 45,46 25,46 18,60 C 25,74 45,74 60,60 Z" />
+    <path class="b-inner" d="M 54,60 C 43,50 29,50 24,60 C 29,70 43,70 54,60 Z" />
+    <circle class="b-accent" cx="38" cy="60" r="2.2" />
+    <circle class="b-accent" cx="30" cy="60" r="1.4" />
+
+    <path class="b-line" d="M 60,60 C 75,46 95,46 102,60 C 95,74 75,74 60,60 Z" />
+    <path class="b-inner" d="M 66,60 C 77,50 91,50 96,60 C 91,70 77,70 66,60 Z" />
+    <circle class="b-accent" cx="82" cy="60" r="2.2" />
+    <circle class="b-accent" cx="90" cy="60" r="1.4" />
+
+    <circle class="b-line" cx="60" cy="60" r="6" />
+    <circle class="b-accent" cx="60" cy="60" r="2.5" />
+
+    <path class="b-line" d="M 0,0 C 14,15 14,35 0,42 C -14,35 -14,15 0,0 Z" />
+    <path class="b-inner" d="M 0,6 C 10,17 10,31 0,36 C -10,31 -10,17 0,6 Z" />
+    <circle class="b-accent" cx="0" cy="22" r="2.2" />
+    <path class="b-line" d="M 0,0 C 15,14 35,14 42,0 C 35,-14 15,-14 0,0 Z" />
+    <path class="b-inner" d="M 6,0 C 17,10 31,10 36,0 C 31,-10 17,-10 6,0 Z" />
+    <circle class="b-accent" cx="22" cy="0" r="2.2" />
+    <circle class="b-line" cx="0" cy="0" r="6" />
+    <circle class="b-accent" cx="0" cy="0" r="2.5" />
+
+    <path class="b-line" d="M 120,0 C 106,15 106,35 120,42 C 134,35 134,15 120,0 Z" />
+    <path class="b-inner" d="M 120,6 C 110,17 110,31 120,36 C 130,31 130,17 120,6 Z" />
+    <circle class="b-accent" cx="120" cy="22" r="2.2" />
+    <path class="b-line" d="M 120,0 C 105,14 85,14 78,0 C 85,-14 105,-14 120,0 Z" />
+    <path class="b-inner" d="M 114,0 C 103,10 89,10 84,0 C 89,-10 103,-10 114,0 Z" />
+    <circle class="b-accent" cx="98" cy="0" r="2.2" />
+    <circle class="b-line" cx="120" cy="0" r="6" />
+    <circle class="b-accent" cx="120" cy="0" r="2.5" />
+
+    <path class="b-line" d="M 0,120 C 14,105 14,85 0,78 C -14,85 -14,105 0,120 Z" />
+    <path class="b-inner" d="M 0,114 C 10,103 10,89 0,84 C -10,89 -10,103 0,114 Z" />
+    <circle class="b-accent" cx="0" cy="98" r="2.2" />
+    <path class="b-line" d="M 0,120 C 15,106 35,106 42,120 C 35,134 15,134 0,120 Z" />
+    <path class="b-inner" d="M 6,120 C 17,110 31,110 36,120 C 31,130 17,130 6,120 Z" />
+    <circle class="b-accent" cx="22" cy="120" r="2.2" />
+    <circle class="b-line" cx="0" cy="120" r="6" />
+    <circle class="b-accent" cx="0" cy="120" r="2.5" />
+
+    <path class="b-line" d="M 120,120 C 106,105 106,85 120,78 C 134,85 134,105 120,120 Z" />
+    <path class="b-inner" d="M 120,114 C 110,103 110,89 120,84 C 130,89 130,103 120,114 Z" />
+    <circle class="b-accent" cx="120" cy="98" r="2.2" />
+    <path class="b-line" d="M 120,120 C 105,106 85,106 78,120 C 85,134 105,134 120,120 Z" />
+    <path class="b-inner" d="M 114,120 C 103,110 89,110 84,120 C 89,130 103,130 114,120 Z" />
+    <circle class="b-accent" cx="98" cy="120" r="2.2" />
+    <circle class="b-line" cx="120" cy="120" r="6" />
+    <circle class="b-accent" cx="120" cy="120" r="2.5" />
+
+    <path class="b-line" d="M 0,60 C 15,46 35,46 42,60 C 35,74 15,74 0,60 Z" />
+    <path class="b-inner" d="M 6,60 C 17,50 31,50 36,60 C 31,70 17,70 6,60 Z" />
+    <circle class="b-accent" cx="22" cy="60" r="2.2" />
+
+    <path class="b-line" d="M 120,60 C 105,46 85,46 78,60 C 85,74 105,74 120,60 Z" />
+    <path class="b-inner" d="M 114,60 C 103,50 89,50 84,60 C 89,70 103,70 114,60 Z" />
+    <circle class="b-accent" cx="98" cy="60" r="2.2" />
+
+    <path class="b-line" d="M 60,0 C 46,15 46,35 60,42 C 74,35 74,15 60,0 Z" />
+    <path class="b-inner" d="M 60,6 C 50,17 50,31 60,36 C 70,31 70,17 60,6 Z" />
+    <circle class="b-accent" cx="60" cy="22" r="2.2" />
+
+    <path class="b-line" d="M 60,120 C 46,105 46,85 60,78 C 74,85 74,105 60,120 Z" />
+    <path class="b-inner" d="M 60,114 C 50,103 50,89 60,84 C 70,89 70,103 60,114 Z" />
+    <circle class="b-accent" cx="60" cy="98" r="2.2" />
+
+    <g transform="translate(30, 30)">
+      <polygon class="b-line" points="0,-6 6,0 0,6 -6,0" />
+      <circle class="b-accent" cx="0" cy="0" r="1.5" />
+    </g>
+    <g transform="translate(90, 30)">
+      <polygon class="b-line" points="0,-6 6,0 0,6 -6,0" />
+      <circle class="b-accent" cx="0" cy="0" r="1.5" />
+    </g>
+    <g transform="translate(30, 90)">
+      <polygon class="b-line" points="0,-6 6,0 0,6 -6,0" />
+      <circle class="b-accent" cx="0" cy="0" r="1.5" />
+    </g>
+    <g transform="translate(90, 90)">
+      <polygon class="b-line" points="0,-6 6,0 0,6 -6,0" />
+      <circle class="b-accent" cx="0" cy="0" r="1.5" />
+    </g>
+  </g>
+</svg>
