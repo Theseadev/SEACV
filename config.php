@@ -1,11 +1,27 @@
 <?php
 // public/config.php
-// Database Configuration
-// Bisa menggunakan Environment Variable atau ubah langsung saat upload ke InfinityFree
-$host = getenv('DB_HOST') ?: 'localhost';
-$dbname = getenv('DB_NAME') ?: 'seacv';
-$username = getenv('DB_USER') ?: 'root';
-$password = getenv('DB_PASS') !== false ? getenv('DB_PASS') : '';
+// Smart Environment Auto-Detect:
+// Otomatis mengenali apakah berjalan di localhost (Laragon) atau di server hosting (InfinityFree)
+$isLocal = (
+    isset($_SERVER['SERVER_NAME']) && 
+    in_array($_SERVER['SERVER_NAME'], ['localhost', '127.0.0.1', 'seacv.test'])
+) || (
+    php_sapi_name() === 'cli' && empty(getenv('DB_HOST'))
+);
+
+if ($isLocal && !getenv('DB_HOST')) {
+    // 1. Database Lokal (Laragon)
+    $host = 'localhost';
+    $dbname = 'seacv';
+    $username = 'root';
+    $password = '';
+} else {
+    // 2. Database Production (InfinityFree)
+    $host = getenv('DB_HOST') ?: 'sql107.infinityfree.com';
+    $dbname = getenv('DB_NAME') ?: 'if0_39237979_seacv';
+    $username = getenv('DB_USER') ?: 'if0_39237979';
+    $password = getenv('DB_PASS') !== false ? getenv('DB_PASS') : 'Fahrul200505';
+}
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
