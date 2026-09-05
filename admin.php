@@ -971,25 +971,43 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
         }
 
         @media (max-width: 640px) {
+            html, body.admin-body {
+                overflow-x: hidden !important;
+                max-width: 100vw !important;
+                width: 100% !important;
+            }
+
+            .admin-layout,
+            .admin-main,
+            .admin-content {
+                overflow-x: hidden !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+
             .admin-topbar {
                 padding: 0 12px;
                 height: 56px;
+                max-width: 100%;
+                box-sizing: border-box;
             }
 
             .topbar-left {
                 gap: 8px;
+                min-width: 0;
             }
 
             .topbar-page-title {
-                font-size: 14.5px;
+                font-size: 14px;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                max-width: 150px;
+                max-width: 140px;
             }
 
             .topbar-right {
                 gap: 8px;
+                flex-shrink: 0;
             }
 
             .btn-view-store {
@@ -1019,7 +1037,8 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
             }
 
             .admin-content {
-                padding: 16px 12px 48px;
+                padding: 14px 12px 48px;
+                box-sizing: border-box;
             }
 
             .page-header {
@@ -1051,7 +1070,7 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
             .kpi-row {
                 grid-template-columns: 1fr 1fr;
                 gap: 8px;
-                margin-bottom: 18px;
+                margin-bottom: 16px;
             }
 
             .kpi-card {
@@ -1070,6 +1089,8 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
 
             .catalog-card {
                 border-radius: 12px;
+                overflow: hidden;
+                width: 100%;
             }
 
             .catalog-toolbar {
@@ -1077,28 +1098,26 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
                 gap: 10px;
                 flex-direction: column;
                 align-items: stretch;
+                width: 100%;
+                box-sizing: border-box;
             }
 
+            /* 2x2 Grid for filter tabs - NO horizontal scroll */
             .filter-group {
-                display: flex;
-                flex-wrap: nowrap;
-                overflow-x: auto;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
                 gap: 6px;
                 width: 100%;
-                padding-bottom: 4px;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-            }
-
-            .filter-group::-webkit-scrollbar {
-                display: none;
             }
 
             .filter-tab {
-                white-space: nowrap;
-                flex-shrink: 0;
-                padding: 6px 11px;
-                font-size: 12.5px;
+                width: 100%;
+                justify-content: center;
+                text-align: center;
+                padding: 8px 6px;
+                font-size: 12px;
+                border-radius: 8px;
+                box-sizing: border-box;
             }
 
             .search-wrapper {
@@ -1107,35 +1126,150 @@ $sidebarCommit = substr($versionData['current_commit'] ?? '5540ac8', 0, 7);
                 min-width: 0;
             }
 
-            .catalog-table th, 
-            .catalog-table td {
-                padding: 10px 12px;
-                font-size: 13px;
+            /* Zero Horizontal Scroll: Native Card View for Products */
+            .table-responsive {
+                overflow-x: hidden !important;
+                width: 100%;
             }
 
-            .table-thumb {
-                width: 40px;
-                height: 54px;
-                min-width: 40px;
+            .catalog-table thead {
+                display: none !important;
             }
 
-            .td-product {
-                min-width: 180px;
-                gap: 10px;
+            .catalog-table, 
+            .catalog-table tbody, 
+            .catalog-table tr {
+                display: block !important;
+                width: 100% !important;
+                box-sizing: border-box;
             }
 
-            .product-name {
-                font-size: 13px;
+            .catalog-table tbody tr {
+                position: relative;
+                padding: 14px 12px;
+                border-bottom: 1px solid var(--adm-border);
+                background: #ffffff;
+            }
+
+            .catalog-table tbody tr:hover {
+                background: #ffffff;
+            }
+
+            .catalog-table tbody tr td {
+                display: block;
+                padding: 0;
+                border: none;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .catalog-table .td-id {
+                position: absolute;
+                top: 12px;
+                right: 12px;
+                width: auto;
+                font-size: 10.5px;
+                font-weight: 700;
+                color: var(--adm-text-muted);
+                background: var(--adm-subtle);
+                padding: 2px 7px;
+                border-radius: 6px;
+            }
+
+            .catalog-table .td-product {
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+                min-width: 0;
+                width: 100%;
+                padding-right: 50px;
+                margin-bottom: 10px;
+                box-sizing: border-box;
+            }
+
+            .catalog-table .table-thumb {
+                width: 52px;
+                height: 70px;
+                min-width: 52px;
+                max-width: 52px;
+                border-radius: 8px;
+                object-fit: cover;
+                flex-shrink: 0;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            }
+
+            .catalog-table .product-info {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .catalog-table .product-name {
+                font-size: 13.5px;
+                font-weight: 700;
+                line-height: 1.35;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            .catalog-table .product-meta {
+                font-size: 11px;
+                color: var(--adm-text-muted);
+                margin-top: 3px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .catalog-table tbody tr td:nth-child(3) {
+                display: inline-block;
+                width: auto;
+                margin-right: 8px;
+                margin-bottom: 10px;
+            }
+
+            .catalog-table tbody tr td:nth-child(4) {
+                display: inline-block;
+                width: auto;
+                margin-bottom: 10px;
+            }
+
+            .badge-category {
+                font-size: 11.5px;
+                padding: 3px 8px;
+            }
+
+            .td-price {
+                font-size: 14px;
+                font-weight: 800;
+                color: var(--adm-primary);
+            }
+
+            .catalog-table tbody tr td:nth-child(5) {
+                display: block;
+                width: 100%;
+                padding-top: 10px;
+                border-top: 1px dashed var(--adm-border);
             }
 
             .td-actions {
-                gap: 4px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                width: 100%;
             }
 
             .btn-edit, 
             .btn-delete {
-                padding: 5px 9px;
-                font-size: 12px;
+                width: 100%;
+                justify-content: center;
+                text-align: center;
+                padding: 8px 12px;
+                font-size: 12.5px;
+                border-radius: 8px;
+                font-weight: 600;
+                box-sizing: border-box;
             }
         }
     </style>

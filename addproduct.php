@@ -785,9 +785,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         @media (max-width: 640px) {
+            html, body.admin-body {
+                overflow-x: hidden !important;
+                max-width: 100vw !important;
+                width: 100% !important;
+            }
+
+            .admin-layout,
+            .admin-main,
+            .admin-content {
+                overflow-x: hidden !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+
             .admin-topbar {
                 padding: 0 12px;
                 height: 56px;
+                max-width: 100%;
+                box-sizing: border-box;
             }
 
             .topbar-left {
