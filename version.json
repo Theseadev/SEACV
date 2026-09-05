@@ -1,10 +1,10 @@
 {
-  "version": "1.0.0",
-  "github_repo": "Theseadev/SEACV",
-  "github_branch": "main",
-  "github_token": "",
-  "current_commit": "ae43f46",
-  "current_commit_msg": "Initial setup SeaCV with GitHub updater",
-  "last_checked": "",
-  "last_updated": "2026-09-05 10:49:18"
+    "version": "1.0.0",
+    "github_repo": "Theseadev\/SEACV",
+    "github_branch": "main",
+    "github_token": "",
+    "current_commit": "23522bc",
+    "current_commit_msg": "Update default repository to Theseadev\/SEACV",
+    "last_checked": "2026-09-05 05:17:51",
+    "last_updated": "2026-09-05 10:49:18"
 }
