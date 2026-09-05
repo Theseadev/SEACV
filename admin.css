@@ -100,10 +100,17 @@ body.admin-body {
     font-size: 19px;
     font-weight: 800;
     letter-spacing: -0.01em;
+    color: var(--adm-primary);
 }
 
-.brand-text .sea { color: #0f172a; }
-.brand-text .cv { color: var(--adm-primary); }
+.brand-name {
+    color: var(--adm-primary);
+}
+
+.brand-text .sea,
+.brand-text .cv {
+    color: var(--adm-primary);
+}
 
 .brand-badge {
     font-size: 10px;

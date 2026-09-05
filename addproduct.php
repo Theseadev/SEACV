@@ -178,10 +178,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: flex;
             align-items: center;
             gap: 6px;
+            color: var(--adm-primary);
         }
 
-        .brand-text .sea { color: #0f172a; }
-        .brand-text .cv { color: var(--adm-primary); }
+        .brand-name {
+            color: var(--adm-primary);
+        }
+
+        .brand-text .sea,
+        .brand-text .cv {
+            color: var(--adm-primary);
+        }
 
         .brand-badge {
             font-size: 10px;
@@ -792,7 +799,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a href="admin.php" class="brand-link">
                     <img src="logo.png" alt="SeaCV Logo" class="brand-logo">
                     <span class="brand-text">
-                        <span class="sea">SEA</span><span class="cv">CV</span>
+                        <span class="brand-name">SEACV</span>
                         <span class="brand-badge">Admin</span>
                     </span>
                 </a>

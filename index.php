@@ -442,6 +442,7 @@ function resolveCategoryIcon($cat) {
             line-height: 0.9;
             margin: 0;
             padding: 0;
+            color: var(--primary);
         }
 
         .brand-text .logo-sea,
@@ -3248,7 +3249,7 @@ function resolveCategoryIcon($cat) {
         <a href="index.php" class="brand-logo">
             <img src="logo.png" alt="SeaCV Logo" class="brand-logo-img" />
             <div class="brand-text">
-                <h1><span class="logo-sea">SEA</span><span class="logo-cv">CV</span></h1>
+                <h1>SEACV</h1>
                 <span>Professional Hub</span>
             </div>
         </a>
