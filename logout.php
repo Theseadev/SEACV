@@ -1,16 +1,6 @@
 <?php
-// public/logout.php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// logout.php - Backward compatibility entrypoint for Logout
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/helpers.php';
 
-// Unset all session variables
-$_SESSION = array();
-
-// Destroy the session
-session_destroy();
-
-// Redirect to main page
-header("location: index.php");
-exit;
-?>
+(new \App\Controllers\AuthController())->logout();

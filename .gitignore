@@ -9,6 +9,11 @@ cookie.txt
 Thumbs.db
 desktop.ini
 
+# Dependencies
+vendor/
+composer.phar
+
 # Editor & IDE settings
 .vscode/
 .idea/
+
