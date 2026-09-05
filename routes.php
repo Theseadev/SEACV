@@ -56,27 +56,32 @@ Flight::group('/admin', function() {
 // -----------------------------------------------------------------------------
 // 4. Legacy Admin File Aliases (100% Backward Compatibility)
 // -----------------------------------------------------------------------------
-Flight::route('GET /admin.php', function() {
+Flight::route('GET /admin.php', function() use ($authMiddleware) {
+    $authMiddleware->before();
     (new AdminController())->index();
-}, false, [$authMiddleware]);
+});
 
-Flight::route('GET|POST /addproduct.php', function() {
+Flight::route('GET|POST /addproduct.php', function() use ($authMiddleware) {
+    $authMiddleware->before();
     (new ProductController())->add();
-}, false, [$authMiddleware]);
+});
 
-Flight::route('GET|POST /edit.php', function() {
+Flight::route('GET|POST /edit.php', function() use ($authMiddleware) {
+    $authMiddleware->before();
     $id = (int)(Flight::request()->query->id ?? Flight::request()->data->id ?? 0);
     (new ProductController())->edit($id);
-}, false, [$authMiddleware]);
+});
 
-Flight::route('GET|POST /hapus.php', function() {
+Flight::route('GET|POST /hapus.php', function() use ($authMiddleware) {
+    $authMiddleware->before();
     $id = (int)(Flight::request()->query->id ?? Flight::request()->data->id ?? 0);
     (new ProductController())->delete($id);
-}, false, [$authMiddleware]);
+});
 
-Flight::route('GET /upgrade.php', function() {
+Flight::route('GET /upgrade.php', function() use ($authMiddleware) {
+    $authMiddleware->before();
     (new AdminController())->upgrade();
-}, false, [$authMiddleware]);
+});
 
 // -----------------------------------------------------------------------------
 // 5. API Endpoints

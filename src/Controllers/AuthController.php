@@ -12,7 +12,7 @@ class AuthController {
         }
 
         if (!empty($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
-            Flight::redirect(url('/admin'));
+            Flight::redirect('/admin');
             return;
         }
 
@@ -62,7 +62,7 @@ class AuthController {
             if ($isValid) {
                 $_SESSION['loggedin'] = true;
                 $_SESSION['username'] = $username;
-                Flight::redirect(url('/admin'));
+                Flight::redirect('/admin');
                 return;
             } else {
                 $error = 'Username atau password tidak valid.';
@@ -90,6 +90,6 @@ class AuthController {
         }
         session_destroy();
 
-        Flight::redirect(url('/login'));
+        Flight::redirect('/login');
     }
 }

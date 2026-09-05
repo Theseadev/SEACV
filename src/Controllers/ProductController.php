@@ -86,7 +86,7 @@ class ProductController {
                         $stmt = $pdo->prepare("INSERT INTO products (name, price, category, image) VALUES (?, ?, ?, ?)");
                         $stmt->execute([$name, $price, $category, $rel_image_path]);
 
-                        Flight::redirect(url('/admin?msg=added'));
+                        Flight::redirect('/admin?msg=added');
                         return;
                     } else {
                         $error = "Gagal memproses upload file gambar. Periksa permission folder uploads.";
@@ -117,7 +117,7 @@ class ProductController {
         }
 
         if ($id <= 0) {
-            Flight::redirect(url('/admin'));
+            Flight::redirect('/admin');
             return;
         }
 
@@ -127,7 +127,7 @@ class ProductController {
         $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$product) {
-            Flight::redirect(url('/admin'));
+            Flight::redirect('/admin');
             return;
         }
 
@@ -225,7 +225,7 @@ class ProductController {
                     $stmt = $pdo->prepare("UPDATE products SET name = ?, price = ?, category = ?, image = ? WHERE id = ?");
                     $stmt->execute([$name, $price, $category, $image_path, $id]);
 
-                    Flight::redirect(url('/admin?msg=updated'));
+                    Flight::redirect('/admin?msg=updated');
                     return;
                 }
             }
@@ -254,7 +254,7 @@ class ProductController {
         }
 
         if ($id <= 0) {
-            Flight::redirect(url('/admin'));
+            Flight::redirect('/admin');
             return;
         }
 
@@ -273,6 +273,6 @@ class ProductController {
             }
         }
 
-        Flight::redirect(url('/admin?msg=deleted'));
+        Flight::redirect('/admin?msg=deleted');
     }
 }
