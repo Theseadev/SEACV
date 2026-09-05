@@ -409,37 +409,35 @@ function resolveCategoryIcon($cat) {
         .brand-logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             text-decoration: none;
-            transform: translateY(-3px);
         }
 
         .brand-logo-img {
-            width: 48px;
-            height: 48px;
+            width: 42px;
+            height: 42px;
             object-fit: contain;
             display: block;
-            filter: drop-shadow(0 2px 8px rgba(37, 99, 235, 0.25));
+            filter: drop-shadow(0 2px 8px rgba(37, 99, 235, 0.2));
             transition: transform var(--transition);
         }
 
         .brand-logo:hover .brand-logo-img {
-            transform: scale(1.06);
+            transform: scale(1.05);
         }
 
         .brand-text {
             display: flex;
             flex-direction: column;
             justify-content: center;
-            transform: translateY(-7px);
         }
 
         .brand-text h1 {
             font-family: 'Outfit', 'Poppins', sans-serif;
-            font-size: 2.2rem;
-            font-weight: 900;
+            font-size: 1.45rem;
+            font-weight: 800;
             letter-spacing: 0.5px;
-            line-height: 0.9;
+            line-height: 1;
             margin: 0;
             padding: 0;
             color: var(--primary);
@@ -452,12 +450,12 @@ function resolveCategoryIcon($cat) {
 
         .brand-text span {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 0.72rem;
+            font-size: 0.65rem;
             font-weight: 700;
             color: var(--text-muted);
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
-            margin-top: 0;
+            margin-top: 2px;
             line-height: 1;
         }
 
@@ -547,12 +545,12 @@ function resolveCategoryIcon($cat) {
                 transform: none;
             }
             .brand-text h1 {
-                font-size: 1.45rem;
-                line-height: 0.95;
+                font-size: 1.25rem;
+                line-height: 1;
             }
             .brand-text span {
-                font-size: 0.62rem;
-                letter-spacing: 1.2px;
+                font-size: 0.58rem;
+                letter-spacing: 1px;
             }
             .nav-actions {
                 gap: 8px;
