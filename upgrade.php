@@ -1109,7 +1109,7 @@ $hasToken = !empty($versionData['github_token']);
                                 <div class="form-group">
                                     <label class="form-label" for="cfgRepo">Nama Repositori GitHub (owner/repo)</label>
                                     <input type="text" id="cfgRepo" class="form-input" 
-                                           placeholder="Contoh: fahrul/seacv" 
+                                           placeholder="Contoh: Theseadev/SEACV" 
                                            value="<?= htmlspecialchars($githubRepo) ?>" required>
                                 </div>
 
