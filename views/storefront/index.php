@@ -3339,16 +3339,16 @@
                 <button type="button" class="accordion-header" onclick="toggleMetricAccordion(this)">
                     <div class="accordion-header-left">
                         <div class="metric-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
                         </div>
-                        <h4>Proses Cepat 30–60 Menit</h4>
+                        <h4>Pembayaran di Akhir</h4>
                     </div>
                     <div class="accordion-chevron">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </div>
                 </button>
                 <div class="accordion-body">
-                    <p>Solusi tepat saat deadline lamaran mendesak. Draft langsung diproses kilat oleh tim berpengalaman dengan kualitas tata letak terbaik.</p>
+                    <p>Dokumen lamaran Anda dikerjakan terlebih dahulu hingga selesai dan dicek. Anda baru melakukan pembayaran setelah hasil pengerjaan draft sudah cocok dan memuaskan.</p>
                 </div>
             </div>
             <div class="accordion-item">
