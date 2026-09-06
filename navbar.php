@@ -28,6 +28,8 @@ $homePrefix = $isHomepage ? '' : 'index.php';
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 .brand-logo {

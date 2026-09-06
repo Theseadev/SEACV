@@ -15,7 +15,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
@@ -3039,6 +3039,8 @@
                 align-items: center;
                 z-index: 1200;
                 box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.08);
+                transform: translateZ(0);
+                will-change: transform;
             }
 
             .bottom-bar-item {
@@ -3236,16 +3238,16 @@
         <div class="hero-banner-card">
             <div class="slider-wrapper" id="heroSlider">
                 <div class="slider-slide active">
-                    <img src="banner/banner03.webp" alt="SeaCV Banner Showcase 01" />
+                    <img src="banner/banner03.webp" alt="SeaCV Banner Showcase 01" fetchpriority="high" decoding="async" />
                 </div>
                 <div class="slider-slide">
-                    <img src="banner/banner01.webp" alt="SeaCV Banner Showcase 02" />
+                    <img src="banner/banner01.webp" alt="SeaCV Banner Showcase 02" loading="lazy" decoding="async" />
                 </div>
                 <div class="slider-slide">
-                    <img src="banner/banner02.webp" alt="SeaCV Banner Showcase 03" />
+                    <img src="banner/banner02.webp" alt="SeaCV Banner Showcase 03" loading="lazy" decoding="async" />
                 </div>
                 <div class="slider-slide">
-                    <img src="banner/banner04.webp" alt="SeaCV Banner Showcase 04" />
+                    <img src="banner/banner04.webp" alt="SeaCV Banner Showcase 04" loading="lazy" decoding="async" />
                 </div>
                 <div class="slider-dots" id="sliderDots"></div>
             </div>
@@ -3587,7 +3589,7 @@
                         </div>
                         <p class="testimonial-text">"Pengerjaannya beneran kilat gak sampai 1 jam sudah selesai! Format ATS-nya rapi banget dan susunan kalimatnya enak dibaca. Adminnya juga fast respon waktu saya minta ganti warna font."</p>
                         <div class="testimonial-user">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80" alt="Sarah Aurelia" class="testimonial-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Sarah+Aurelia&background=eff6ff&color=2563eb&bold=true'" />
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80" alt="Sarah Aurelia" class="testimonial-avatar" loading="lazy" decoding="async" width="48" height="48" onerror="this.src='https://ui-avatars.com/api/?name=Sarah+Aurelia&background=eff6ff&color=2563eb&bold=true'" />
                             <div class="user-info">
                                 <h5>Sarah Aurelia</h5>
                                 <span>Management Trainee</span>
@@ -3602,7 +3604,7 @@
                         </div>
                         <p class="testimonial-text">"Puas banget sama pelayanannya. Adminnya ramah dan fast respon, minta revisi minor langsung ditangani dengan sabar. Data diri amanah dan hasil file PDF-nya sangat jernih serta rapi."</p>
                         <div class="testimonial-user">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80" alt="Dimas Pratama" class="testimonial-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Dimas+Pratama&background=eff6ff&color=2563eb&bold=true'" />
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80" alt="Dimas Pratama" class="testimonial-avatar" loading="lazy" decoding="async" width="48" height="48" onerror="this.src='https://ui-avatars.com/api/?name=Dimas+Pratama&background=eff6ff&color=2563eb&bold=true'" />
                             <div class="user-info">
                                 <h5>Dimas Pratama</h5>
                                 <span>Software Engineer</span>
@@ -3617,7 +3619,7 @@
                         </div>
                         <p class="testimonial-text">"Desain CV Kreatifnya bagus dan elegan banget, warnanya pas dan gak pasaran. Tatanan teksnya rapi, prosesnya juga cepat tanpa ribet. Recommended banget buat yang mau CV rapi!"</p>
                         <div class="testimonial-user">
-                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&auto=format&fit=crop&q=80" alt="Nadira Putri" class="testimonial-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Nadira+Putri&background=eff6ff&color=2563eb&bold=true'" />
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&auto=format&fit=crop&q=80" alt="Nadira Putri" class="testimonial-avatar" loading="lazy" decoding="async" width="48" height="48" onerror="this.src='https://ui-avatars.com/api/?name=Nadira+Putri&background=eff6ff&color=2563eb&bold=true'" />
                             <div class="user-info">
                                 <h5>Nadira Putri</h5>
                                 <span>Fresh Graduate</span>
@@ -3632,7 +3634,7 @@
                         </div>
                         <p class="testimonial-text">"Hasil rombak CV di SeaCV rapi banget. Riwayat kerja dan keahlian yang tadinya berantakan jadi tertata runut dan enak dilihat. Pengerjaannya cepat dan admin komunikatif."</p>
                         <div class="testimonial-user">
-                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80" alt="Rizky Firmansyah" class="testimonial-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Rizky+Firmansyah&background=eff6ff&color=2563eb&bold=true'" />
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80" alt="Rizky Firmansyah" class="testimonial-avatar" loading="lazy" decoding="async" width="48" height="48" onerror="this.src='https://ui-avatars.com/api/?name=Rizky+Firmansyah&background=eff6ff&color=2563eb&bold=true'" />
                             <div class="user-info">
                                 <h5>Rizky Firmansyah</h5>
                                 <span>Digital Marketing</span>
@@ -3647,7 +3649,7 @@
                         </div>
                         <p class="testimonial-text">"Awalnya ragu pesan jasa CV online, ternyata SeaCV amanah banget. File PDF dan PNG yang dikirim rapi banget, jernih tanpa pecah, dan bebas watermark. CS-nya fast respon dan solutif."</p>
                         <div class="testimonial-user">
-                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80" alt="Anisa Rahmawati" class="testimonial-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Anisa+Rahmawati&background=eff6ff&color=2563eb&bold=true'" />
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80" alt="Anisa Rahmawati" class="testimonial-avatar" loading="lazy" decoding="async" width="48" height="48" onerror="this.src='https://ui-avatars.com/api/?name=Anisa+Rahmawati&background=eff6ff&color=2563eb&bold=true'" />
                             <div class="user-info">
                                 <h5>Anisa Rahmawati</h5>
                                 <span>Staff Akuntansi</span>
@@ -3662,7 +3664,7 @@
                         </div>
                         <p class="testimonial-text">"Prosesnya cepat dan hasilnya presisi. Format ATS-nya clean, tata letak teks teratur, dan pengerjaannya gak pakai lama. Pelayanan ramah serta amanah, harga juga sangat terjangkau!"</p>
                         <div class="testimonial-user">
-                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&auto=format&fit=crop&q=80" alt="Fajar Ramadhan" class="testimonial-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Fajar+Ramadhan&background=eff6ff&color=2563eb&bold=true'" />
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&auto=format&fit=crop&q=80" alt="Fajar Ramadhan" class="testimonial-avatar" loading="lazy" decoding="async" width="48" height="48" onerror="this.src='https://ui-avatars.com/api/?name=Fajar+Ramadhan&background=eff6ff&color=2563eb&bold=true'" />
                             <div class="user-info">
                                 <h5>Fajar Ramadhan</h5>
                                 <span>Admin Operasional</span>
@@ -3677,7 +3679,7 @@
                         </div>
                         <p class="testimonial-text">"Tipografi dan layout CV Kreatifnya bagus banget! Pemilihan font proporsional, estetika modern dan clean. Pelayanannya kilat, pengerjaan benar-benar profesional."</p>
                         <div class="testimonial-user">
-                            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120&auto=format&fit=crop&q=80" alt="Bella Savira" class="testimonial-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Bella+Savira&background=eff6ff&color=2563eb&bold=true'" />
+                            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120&auto=format&fit=crop&q=80" alt="Bella Savira" class="testimonial-avatar" loading="lazy" decoding="async" width="48" height="48" onerror="this.src='https://ui-avatars.com/api/?name=Bella+Savira&background=eff6ff&color=2563eb&bold=true'" />
                             <div class="user-info">
                                 <h5>Bella Savira</h5>
                                 <span>Graphic Designer</span>
@@ -3692,7 +3694,7 @@
                         </div>
                         <p class="testimonial-text">"Gak bertele-tele dan fast respon. Cukup kirim riwayat via WhatsApp, gak sampai 45 menit CV sudah beres dan hasilnya rapi siap pakai. Sangat membantu kalau lagi butuh cepat."</p>
                         <div class="testimonial-user">
-                            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=120&auto=format&fit=crop&q=80" alt="Hendra Setiawan" class="testimonial-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Hendra+Setiawan&background=eff6ff&color=2563eb&bold=true'" />
+                            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=120&auto=format&fit=crop&q=80" alt="Hendra Setiawan" class="testimonial-avatar" loading="lazy" decoding="async" width="48" height="48" onerror="this.src='https://ui-avatars.com/api/?name=Hendra+Setiawan&background=eff6ff&color=2563eb&bold=true'" />
                             <div class="user-info">
                                 <h5>Hendra Setiawan</h5>
                                 <span>Logistik & Distribusi</span>
@@ -3707,7 +3709,7 @@
                         </div>
                         <p class="testimonial-text">"Desainnya bagus dan rapi banget, sertifikasi dan data riwayat saya disusun runtut. Adminnya amanah menjaga kerahasiaan data, respon cepat, dan revisi langsung selesai dalam hitungan menit."</p>
                         <div class="testimonial-user">
-                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&auto=format&fit=crop&q=80" alt="Citra Kirana" class="testimonial-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Citra+Kirana&background=eff6ff&color=2563eb&bold=true'" />
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&auto=format&fit=crop&q=80" alt="Citra Kirana" class="testimonial-avatar" loading="lazy" decoding="async" width="48" height="48" onerror="this.src='https://ui-avatars.com/api/?name=Citra+Kirana&background=eff6ff&color=2563eb&bold=true'" />
                             <div class="user-info">
                                 <h5>Citra Kirana</h5>
                                 <span>Tenaga Medis</span>
@@ -3722,7 +3724,7 @@
                         </div>
                         <p class="testimonial-text">"Pelayanan SeaCV sangat memuaskan. Desain modern, tata letak rapi dan profesional, serta prosesnya kilat. Admin amanah dan fast respon dari awal konsultasi sampai file dikirim."</p>
                         <div class="testimonial-user">
-                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=120&auto=format&fit=crop&q=80" alt="Kevin Sanjaya" class="testimonial-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Kevin+Sanjaya&background=eff6ff&color=2563eb&bold=true'" />
+                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=120&auto=format&fit=crop&q=80" alt="Kevin Sanjaya" class="testimonial-avatar" loading="lazy" decoding="async" width="48" height="48" onerror="this.src='https://ui-avatars.com/api/?name=Kevin+Sanjaya&background=eff6ff&color=2563eb&bold=true'" />
                             <div class="user-info">
                                 <h5>Kevin Sanjaya</h5>
                                 <span>Business Development</span>
@@ -4509,11 +4511,12 @@
             appendBotMessage(reply, followUpChips);
         }
 
-        // Reading Scroll Progress Bar & Back to Top Logic
+        // Reading Scroll Progress Bar & Back to Top Logic (rAF Throttled for 60fps)
         const progressBar = document.getElementById('scrollProgressBar');
         const backToTopBtn = document.getElementById('backToTopBtn');
+        let progressScrollTicking = false;
 
-        window.addEventListener('scroll', () => {
+        function updateScrollProgressBar() {
             const scrollTop = window.scrollY || document.documentElement.scrollTop;
             const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
@@ -4528,6 +4531,14 @@
                 } else {
                     backToTopBtn.classList.remove('visible');
                 }
+            }
+            progressScrollTicking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!progressScrollTicking) {
+                window.requestAnimationFrame(updateScrollProgressBar);
+                progressScrollTicking = true;
             }
         }, { passive: true });
 
@@ -4803,7 +4814,8 @@
                 }
             });
 
-            // Scroll listener with debounced unlock
+            // Scroll listener throttled with requestAnimationFrame
+            let spyScrollTicking = false;
             window.addEventListener('scroll', function() {
                 if (isClickLocked) {
                     clearTimeout(unlockTimer);
@@ -4813,7 +4825,13 @@
                     }, 140);
                     return;
                 }
-                updateActiveTab();
+                if (!spyScrollTicking) {
+                    window.requestAnimationFrame(() => {
+                        updateActiveTab();
+                        spyScrollTicking = false;
+                    });
+                    spyScrollTicking = true;
+                }
             }, { passive: true });
 
             // Native scrollend support
