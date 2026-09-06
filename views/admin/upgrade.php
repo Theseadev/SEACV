@@ -1480,21 +1480,43 @@
 
                 if (json.status === 'success') {
                     if (json.has_update) {
-                        badge.className = 'badge-status available';
-                        badge.textContent = '★ Update Tersedia';
-                        btnApply.disabled = false;
-                        document.getElementById('btnApplyText').textContent = `Mulai Upgrade ke #${json.remote_sha}`;
+                        if (badge) {
+                            badge.className = 'badge-status available';
+                            badge.textContent = '★ Update Tersedia';
+                        }
+                        if (btnApply) {
+                            btnApply.disabled = false;
+                            btnApply.innerHTML = `
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                <span id="btnApplyText">Mulai Upgrade ke #${json.remote_sha}</span>
+                            `;
+                        }
                         setTerminalStatus('UPDATE FOUND', '#f59e0b');
                     } else {
-                        badge.className = 'badge-status uptodate';
-                        badge.textContent = '✓ Up to Date';
-                        btnApply.disabled = true;
-                        document.getElementById('btnApplyText').textContent = 'Sistem Sudah Mutakhir';
+                        if (badge) {
+                            badge.className = 'badge-status uptodate';
+                            badge.textContent = '✓ Up to Date';
+                        }
+                        if (btnApply) {
+                            btnApply.disabled = true;
+                            btnApply.innerHTML = `
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span id="btnApplyText">Sistem Sudah Mutakhir</span>
+                            `;
+                        }
                         setTerminalStatus('UP TO DATE', '#34d399');
                     }
                 } else {
-                    badge.className = 'badge-status ready';
-                    badge.textContent = '● Error';
+                    if (badge) {
+                        badge.className = 'badge-status ready';
+                        badge.textContent = '● Error';
+                    }
                     setTerminalStatus('ERROR', '#ef4444');
                 }
             } catch (err) {
@@ -1529,15 +1551,19 @@
 
             const btnApply = document.getElementById('btnApplyUpdate');
             const btnCheck = document.getElementById('btnCheckUpdate');
-            btnApply.disabled = true;
-            btnCheck.disabled = true;
-            btnApply.innerHTML = `
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin">
-                    <line x1="12" y1="2" x2="12" y2="6"></line>
-                    <line x1="12" y1="18" x2="12" y2="22"></line>
-                </svg>
-                <span>Sedang Memperbarui...</span>
-            `;
+            if (btnApply) {
+                btnApply.disabled = true;
+                btnApply.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin">
+                        <line x1="12" y1="2" x2="12" y2="6"></line>
+                        <line x1="12" y1="18" x2="12" y2="22"></line>
+                    </svg>
+                    <span id="btnApplyText">Sedang Memperbarui...</span>
+                `;
+            }
+            if (btnCheck) {
+                btnCheck.disabled = true;
+            }
 
             setTerminalStatus('UPGRADING...', '#f59e0b');
 
@@ -1551,10 +1577,23 @@
 
                 if (json.status === 'success') {
                     setTerminalStatus('COMPLETED', '#34d399');
-                    document.getElementById('lblCommit').textContent = '#' + json.new_commit;
-                    document.getElementById('updateBadge').className = 'badge-status uptodate';
-                    document.getElementById('updateBadge').textContent = '✓ Up to Date';
-                    document.getElementById('btnApplyText').textContent = 'Sistem Berhasil Diperbarui';
+                    const lblCommit = document.getElementById('lblCommit');
+                    if (lblCommit && json.new_commit) {
+                        lblCommit.textContent = '#' + json.new_commit;
+                    }
+                    const updateBadge = document.getElementById('updateBadge');
+                    if (updateBadge) {
+                        updateBadge.className = 'badge-status uptodate';
+                        updateBadge.textContent = '✓ Up to Date';
+                    }
+                    if (btnApply) {
+                        btnApply.innerHTML = `
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span id="btnApplyText">Sistem Berhasil Diperbarui</span>
+                        `;
+                    }
 
                     Swal.fire({
                         icon: 'success',
@@ -1566,8 +1605,17 @@
                     });
                 } else {
                     setTerminalStatus('FAILED', '#ef4444');
-                    btnApply.disabled = false;
-                    document.getElementById('btnApplyText').textContent = 'Coba Upgrade Ulang';
+                    if (btnApply) {
+                        btnApply.disabled = false;
+                        btnApply.innerHTML = `
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            <span id="btnApplyText">Coba Upgrade Ulang</span>
+                        `;
+                    }
                     Swal.fire({
                         icon: 'error',
                         title: 'Upgrade Gagal',
@@ -1577,10 +1625,21 @@
             } catch (err) {
                 appendLog('ERROR', 'Terjadi kesalahan sistem: ' + err.message);
                 setTerminalStatus('ERROR', '#ef4444');
-                btnApply.disabled = false;
-                document.getElementById('btnApplyText').textContent = 'Coba Upgrade Ulang';
+                if (btnApply) {
+                    btnApply.disabled = false;
+                    btnApply.innerHTML = `
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        <span id="btnApplyText">Coba Upgrade Ulang</span>
+                    `;
+                }
             } finally {
-                btnCheck.disabled = false;
+                if (btnCheck) {
+                    btnCheck.disabled = false;
+                }
             }
         }
 
