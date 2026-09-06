@@ -363,10 +363,9 @@ $pageTitle = $article['title'] . ' | SeaCV';
             inset: 0;
             background-image: url('batik-megamendung.jpg');
             background-size: cover;
-            background-position: center;
-            opacity: 0.35;
+            background-position: center 25%;
+            opacity: 0.32;
             pointer-events: none;
-            filter: contrast(1.15) saturate(1.25);
         }
 
         .article-cta-content {
@@ -541,8 +540,13 @@ $pageTitle = $article['title'] . ' | SeaCV';
             .article-cta-box {
                 flex-direction: column;
                 text-align: center;
-                padding: 22px 16px;
-                border-radius: 14px;
+                padding: 28px 20px 24px;
+                border-radius: 18px;
+                margin-bottom: 85px;
+                box-shadow: 0 12px 30px -4px rgba(7, 13, 30, 0.45);
+            }
+            .article-cta-box::before {
+                background-position: center 15%;
             }
             .article-cta-content h3 {
                 font-size: 1.2rem;
@@ -717,17 +721,7 @@ $pageTitle = $article['title'] . ' | SeaCV';
         </section>
     </div>
 
-    <!-- Footer -->
-    <footer class="site-footer">
-        <div class="site-footer-links">
-            <a href="index.php">Beranda</a>
-            <a href="index.php#katalog-layanan">Katalog Template</a>
-            <a href="index.php#keunggulan">Keunggulan</a>
-            <a href="index.php#cara-pemesanan">Cara Pemesanan</a>
-            <a href="artikel.php">Berita &amp; Artikel</a>
-        </div>
-        <p>&copy; <?= date('Y') ?> SeaCV Professional Hub. Seluruh hak cipta dilindungi undang-undang.</p>
-    </footer>
+
 
     <!-- Mobile App-Style Bottom Navigation Bar (5 Items) -->
     <nav class="mobile-bottom-bar" id="mobileBottomBar" aria-label="Navigasi Menu Mobile">
