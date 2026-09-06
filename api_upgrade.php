@@ -43,7 +43,9 @@ function githubRequest($url, $token = '') {
     
     $headers = [
         'Accept: application/vnd.github.v3+json',
-        'User-Agent: SeaCV-Updater/1.0'
+        'User-Agent: SeaCV-Updater/1.0',
+        'Cache-Control: no-cache',
+        'Pragma: no-cache'
     ];
     if (!empty($token)) {
         $headers[] = 'Authorization: Bearer ' . trim($token);

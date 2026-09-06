@@ -448,54 +448,80 @@
             scroll-margin-top: 96px;
         }
 
-        /* Trust Stats Bar (Di bawah Banner, di atas Keunggulan) */
+        /* Trust Stats Bar (Di bawah Banner, di atas Keunggulan - Theme Megamendung Batik sama dengan di Filter) */
         .trust-stats-bar {
             display: flex;
             align-items: center;
             justify-content: space-around;
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
-            padding: 20px 24px;
-            margin-bottom: 36px;
             position: relative;
+            background: linear-gradient(135deg, #070d1e 0%, #0d1b3e 50%, #0f2757 100%);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            border-radius: var(--radius-lg);
+            padding: 22px 28px;
+            margin-bottom: 36px;
+            box-shadow: 0 16px 36px -4px rgba(7, 13, 30, 0.45);
             overflow: hidden;
         }
 
         .trust-stats-bar::before {
-            content: '';
+            content: "";
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #2563eb 0%, #38bdf8 50%, #10b981 100%);
+            inset: 0;
+            background-image: url('batik-megamendung.jpg');
+            background-size: cover;
+            background-position: center 40%;
+            background-repeat: no-repeat;
+            opacity: 0.42;
+            pointer-events: none;
+            z-index: 0;
+            filter: contrast(1.15) saturate(1.25);
+        }
+
+        .trust-stats-bar::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(7, 13, 30, 0.90) 0%, rgba(13, 27, 62, 0.62) 50%, rgba(7, 13, 30, 0.85) 100%),
+                        linear-gradient(180deg, rgba(7, 13, 30, 0.35) 0%, rgba(7, 13, 30, 0.8) 100%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         .trust-stat-item {
+            position: relative;
+            z-index: 1;
             display: flex;
             align-items: center;
             gap: 14px;
             flex: 1;
             justify-content: center;
+            transition: transform 0.2s ease;
+        }
+
+        .trust-stat-item:hover {
+            transform: translateY(-2px);
         }
 
         .trust-stat-icon {
-            width: 44px;
-            height: 44px;
+            width: 46px;
+            height: 46px;
             border-radius: 12px;
-            background: var(--primary-light);
-            color: var(--primary);
+            background: rgba(37, 99, 235, 0.22);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            color: #38bdf8;
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.18);
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         .trust-stat-item:hover .trust-stat-icon {
             transform: scale(1.08);
+            background: rgba(37, 99, 235, 0.35);
+            border-color: rgba(56, 189, 248, 0.6);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
         }
 
         .trust-stat-content {
@@ -506,8 +532,8 @@
         .trust-stat-label {
             font-size: 0.82rem;
             font-weight: 600;
-            color: var(--text-muted);
-            letter-spacing: 0.01em;
+            color: #94a3b8;
+            letter-spacing: 0.02em;
             margin-bottom: 2px;
         }
 
@@ -518,31 +544,34 @@
             font-family: var(--font-heading);
             font-size: 1.6rem;
             font-weight: 800;
-            color: var(--text-main);
+            color: #ffffff;
             line-height: 1.15;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
         .stat-number {
             font-variant-numeric: tabular-nums;
-            color: var(--text-main);
+            color: #ffffff;
         }
 
         .stat-suffix {
-            color: var(--primary);
+            color: #38bdf8;
             font-weight: 800;
         }
 
         .stat-unit {
             font-size: 0.9rem;
             font-weight: 700;
-            color: var(--primary);
+            color: #38bdf8;
             margin-left: 3px;
         }
 
         .trust-stat-divider {
+            position: relative;
+            z-index: 1;
             width: 1px;
             height: 42px;
-            background: var(--border-color);
+            background: rgba(255, 255, 255, 0.14);
             flex-shrink: 0;
         }
 
@@ -2395,12 +2424,12 @@
                 margin: 20px auto 0;
                 padding: 0 14px;
             }
-            /* Trust Stats Bar (Mobile: 2x2 Grid Layout) */
+            /* Trust Stats Bar (Mobile: 2x2 Grid Layout & Dark Glassmorphism matching Filter) */
             .trust-stats-bar {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
-                padding: 14px 10px;
+                padding: 12px 10px;
                 margin-bottom: 24px;
                 border-radius: 14px;
             }
@@ -2412,18 +2441,29 @@
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
-                background: #f8fafc;
-                border: 1px solid var(--border-color);
-                border-radius: 10px;
-                padding: 10px 6px;
+                background: rgba(255, 255, 255, 0.08);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                border-radius: 12px;
+                padding: 11px 6px;
                 gap: 4px;
                 min-width: 0;
+                transition: background 0.2s, border-color 0.2s;
+            }
+            .trust-stat-item:active {
+                background: rgba(255, 255, 255, 0.15);
+                border-color: rgba(56, 189, 248, 0.45);
             }
             .trust-stat-icon {
                 width: 32px;
                 height: 32px;
                 border-radius: 8px;
                 margin-bottom: 1px;
+                background: rgba(37, 99, 235, 0.25);
+                border: 1px solid rgba(56, 189, 248, 0.35);
+                color: #38bdf8;
+                box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);
             }
             .trust-stat-icon svg {
                 width: 16px;
@@ -2437,6 +2477,7 @@
             .trust-stat-label {
                 font-size: 0.68rem;
                 line-height: 1.25;
+                color: #94a3b8;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -2446,9 +2487,17 @@
                 font-size: 1.18rem;
                 justify-content: center;
                 white-space: nowrap;
+                color: #ffffff;
+            }
+            .stat-number {
+                color: #ffffff;
+            }
+            .stat-suffix {
+                color: #38bdf8;
             }
             .stat-unit {
                 font-size: 0.72rem;
+                color: #38bdf8;
             }
 
             /* Layar Ekstra Kecil (<= 375px) Otomatis Perkecil */
