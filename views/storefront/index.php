@@ -4741,7 +4741,11 @@
                     return;
                 }
 
-                // 2. Sections in physical order on the page
+                // 2. Sticky Navbar height
+                const navbar = document.querySelector('.navbar');
+                const navHeight = navbar ? navbar.offsetHeight : (window.innerWidth <= 768 ? 64 : 80);
+
+                // 3. Sections in physical order on the page
                 const orderedSections = [
                     { id: 'keunggulan', el: document.getElementById('keunggulan') },
                     { id: 'katalog-layanan', el: document.getElementById('katalog-layanan') },
@@ -4749,45 +4753,25 @@
                     { id: 'testimoni', el: document.getElementById('testimoni') }
                 ].filter(s => s.el !== null);
 
-                // Reference line positioned just below the sticky navbar
-                const navbar = document.querySelector('.navbar');
-                const navHeight = navbar ? navbar.offsetHeight : (window.innerWidth <= 768 ? 64 : 80);
-                const refLine = navHeight + 50;
-
+                // 4. Calculate dominant section based on visible height in viewport below navbar
+                let maxVisible = 0;
                 let matchedId = null;
 
-                // Match section intersecting the reading reference line
-                for (let i = 0; i < orderedSections.length; i++) {
-                    const rect = orderedSections[i].el.getBoundingClientRect();
-                    if (rect.top <= refLine && rect.bottom > refLine) {
-                        matchedId = orderedSections[i].id;
-                        break;
-                    }
-                }
+                orderedSections.forEach(sec => {
+                    const rect = sec.el.getBoundingClientRect();
+                    const vTop = Math.max(navHeight, rect.top);
+                    const vBottom = Math.min(window.innerHeight, rect.bottom);
+                    const vHeight = Math.max(0, vBottom - vTop);
 
-                // Fallback if between sections
-                if (!matchedId) {
-                    if (orderedSections.length > 0 && orderedSections[0].el.getBoundingClientRect().top > refLine) {
-                        // User is above the first section (in Hero slider)
-                        if (window.location.hash === '#katalog-layanan') {
-                            matchedId = 'katalog-layanan';
-                        } else {
-                            matchedId = null;
-                        }
-                    } else {
-                        // Section with largest visible area below navbar
-                        let maxVisible = 0;
-                        orderedSections.forEach(sec => {
-                            const rect = sec.el.getBoundingClientRect();
-                            const vTop = Math.max(navHeight, rect.top);
-                            const vBottom = Math.min(window.innerHeight, rect.bottom);
-                            const vHeight = Math.max(0, vBottom - vTop);
-                            if (vHeight > maxVisible) {
-                                maxVisible = vHeight;
-                                matchedId = sec.id;
-                            }
-                        });
+                    if (vHeight > maxVisible) {
+                        maxVisible = vHeight;
+                        matchedId = sec.id;
                     }
+                });
+
+                // Top Hero Showcase: if user is at the very top and no section is prominent yet
+                if (maxVisible < 120 && window.scrollY < 250) {
+                    matchedId = null;
                 }
 
                 setActiveTab(matchedId);
