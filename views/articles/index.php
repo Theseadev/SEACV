@@ -735,10 +735,13 @@ $pageTitle = 'Berita, Info Lowongan & Edukasi Karir Indonesia | SeaCV';
             }
 
             .bottom-bar-item span {
-                font-size: 0.68rem;
+                font-size: 0.65rem;
                 font-weight: 600;
                 line-height: 1.1;
                 white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
             }
 
             .bottom-bar-item.active {

@@ -3035,7 +3035,7 @@
                 -webkit-backdrop-filter: blur(20px);
                 border-top: 1px solid rgba(226, 232, 240, 0.9);
                 display: grid;
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(5, 1fr);
                 align-items: center;
                 z-index: 1200;
                 box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.08);
@@ -3050,14 +3050,16 @@
                 text-decoration: none;
                 color: #64748b;
                 height: 100%;
+                min-width: 0;
+                padding: 4px 1px;
                 transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
                 position: relative;
                 -webkit-tap-highlight-color: transparent;
             }
 
             .bottom-bar-item .bottom-bar-icon {
-                width: 28px;
-                height: 28px;
+                width: 26px;
+                height: 26px;
                 border-radius: 8px;
                 display: flex;
                 align-items: center;
@@ -3066,14 +3068,21 @@
             }
 
             .bottom-bar-item svg {
+                width: 19px;
+                height: 19px;
                 transition: transform 0.2s ease, stroke 0.2s ease;
             }
 
             .bottom-bar-item span {
-                font-size: 0.68rem;
+                font-size: 0.65rem;
                 font-weight: 600;
                 line-height: 1;
-                letter-spacing: 0.2px;
+                letter-spacing: -0.1px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+                text-align: center;
                 transition: color 0.2s ease, font-weight 0.2s ease;
             }
 
