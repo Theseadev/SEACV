@@ -448,6 +448,104 @@
             scroll-margin-top: 96px;
         }
 
+        /* Trust Stats Bar (Di bawah Banner, di atas Keunggulan) */
+        .trust-stats-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+            padding: 20px 24px;
+            margin-bottom: 36px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trust-stats-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #2563eb 0%, #38bdf8 50%, #10b981 100%);
+        }
+
+        .trust-stat-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .trust-stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
+        }
+
+        .trust-stat-item:hover .trust-stat-icon {
+            transform: scale(1.08);
+        }
+
+        .trust-stat-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .trust-stat-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.01em;
+            margin-bottom: 2px;
+        }
+
+        .trust-stat-value {
+            display: flex;
+            align-items: baseline;
+            gap: 2px;
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.15;
+        }
+
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+            color: var(--text-main);
+        }
+
+        .stat-suffix {
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .stat-unit {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-left: 3px;
+        }
+
+        .trust-stat-divider {
+            width: 1px;
+            height: 42px;
+            background: var(--border-color);
+            flex-shrink: 0;
+        }
+
         .metrics-header {
             text-align: center;
             margin-bottom: 24px;
@@ -2297,6 +2395,43 @@
                 margin: 20px auto 0;
                 padding: 0 14px;
             }
+            /* Trust Stats Bar (Mobile Responsive) */
+            .trust-stats-bar {
+                padding: 12px 6px;
+                margin-bottom: 22px;
+                gap: 4px;
+                border-radius: 12px;
+            }
+            .trust-stat-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 4px;
+                padding: 0 2px;
+            }
+            .trust-stat-icon {
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+            }
+            .trust-stat-icon svg {
+                width: 16px;
+                height: 16px;
+            }
+            .trust-stat-label {
+                font-size: 0.66rem;
+                line-height: 1.2;
+                white-space: nowrap;
+            }
+            .trust-stat-value {
+                font-size: 1.15rem;
+                justify-content: center;
+            }
+            .stat-unit {
+                font-size: 0.72rem;
+            }
+            .trust-stat-divider {
+                height: 34px;
+            }
             .metrics-header {
                 margin-bottom: 18px;
             }
@@ -3023,6 +3158,51 @@
 
     <!-- Keunggulan Layanan Bar -->
     <section class="metrics-section" id="keunggulan">
+        <!-- Trust Stats Bar (Di Bawah Banner, Di Atas Keunggulan Layanan) -->
+        <div class="trust-stats-bar" id="trustStatsBar">
+            <div class="trust-stat-item">
+                <div class="trust-stat-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </div>
+                <div class="trust-stat-content">
+                    <span class="trust-stat-label">Telah Melayani :</span>
+                    <div class="trust-stat-value">
+                        <span class="stat-number" data-target="1500">0</span><span class="stat-suffix">+</span>
+                        <span class="stat-unit">Pelamar</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trust-stat-divider"></div>
+
+            <div class="trust-stat-item">
+                <div class="trust-stat-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+                </div>
+                <div class="trust-stat-content">
+                    <span class="trust-stat-label">Terjamin Amanah :</span>
+                    <div class="trust-stat-value">
+                        <span class="stat-number" data-target="100">0</span><span class="stat-suffix">%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trust-stat-divider"></div>
+
+            <div class="trust-stat-item">
+                <div class="trust-stat-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </div>
+                <div class="trust-stat-content">
+                    <span class="trust-stat-label">Pengerjaan Cepat :</span>
+                    <div class="trust-stat-value">
+                        <span class="stat-number" data-target="30">0</span>
+                        <span class="stat-unit">Menit</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="metrics-header">
             <h3>Keunggulan Layanan SeaCV</h3>
             <p>Standar mutu tinggi untuk menjamin kepuasan, kerahasiaan, dan pengerjaan kilat dokumen lamaran Anda</p>
@@ -4426,6 +4606,62 @@
 
             window.addEventListener('scroll', updateActiveTab, { passive: true });
             updateActiveTab();
+        })();
+
+        // ============================================================
+        // Animated Counter for Trust Stats Bar
+        // ============================================================
+        (function() {
+            function animateValue(el, target, duration) {
+                const startTime = performance.now();
+                function update(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const ease = 1 - Math.pow(1 - progress, 3);
+                    const current = Math.floor(target * ease);
+                    el.textContent = current.toLocaleString('id-ID');
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    } else {
+                        el.textContent = target.toLocaleString('id-ID');
+                    }
+                }
+                requestAnimationFrame(update);
+            }
+
+            function initTrustStatsCounter() {
+                const bar = document.getElementById('trustStatsBar');
+                if (!bar) return;
+
+                let animated = false;
+                if ('IntersectionObserver' in window) {
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting && !animated) {
+                                animated = true;
+                                bar.querySelectorAll('.stat-number').forEach(numEl => {
+                                    const target = parseInt(numEl.getAttribute('data-target'), 10) || 0;
+                                    animateValue(numEl, target, 1600);
+                                });
+                                observer.unobserve(bar);
+                            }
+                        });
+                    }, { threshold: 0.15 });
+
+                    observer.observe(bar);
+                } else {
+                    // Fallback without observer
+                    bar.querySelectorAll('.stat-number').forEach(numEl => {
+                        numEl.textContent = (parseInt(numEl.getAttribute('data-target'), 10) || 0).toLocaleString('id-ID');
+                    });
+                }
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initTrustStatsCounter);
+            } else {
+                initTrustStatsCounter();
+            }
         })();
     </script>
 </body>
