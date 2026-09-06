@@ -7,12 +7,12 @@ use PDO;
 
 class AuthController {
     public function showLogin(): void {
-        if (session_status() === PHP_SESSION_NONE) {
+        if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
             session_start();
         }
 
         if (!empty($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
-            Flight::redirect('/admin');
+            Flight::redirect(url('/admin'));
             return;
         }
 
@@ -23,13 +23,13 @@ class AuthController {
     }
 
     public function login(): void {
-        if (session_status() === PHP_SESSION_NONE) {
+        if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
             session_start();
         }
 
         $request = Flight::request();
-        $username = trim($request->data->username ?? '');
-        $password = trim($request->data->password ?? '');
+        $username = trim($request->data->username ?? $_POST['username'] ?? '');
+        $password = trim($request->data->password ?? $_POST['password'] ?? '');
         $error = '';
 
         if ($username === '') {
@@ -62,7 +62,7 @@ class AuthController {
             if ($isValid) {
                 $_SESSION['loggedin'] = true;
                 $_SESSION['username'] = $username;
-                Flight::redirect('/admin');
+                Flight::redirect(url('/admin'));
                 return;
             } else {
                 $error = 'Username atau password tidak valid.';
@@ -76,7 +76,7 @@ class AuthController {
     }
 
     public function logout(): void {
-        if (session_status() === PHP_SESSION_NONE) {
+        if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
             session_start();
         }
 
@@ -90,6 +90,6 @@ class AuthController {
         }
         session_destroy();
 
-        Flight::redirect('/login');
+        Flight::redirect(url('/login'));
     }
 }
