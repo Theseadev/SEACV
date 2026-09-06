@@ -17,7 +17,7 @@ class ArticleService {
                 'category' => 'Info Loker',
                 'summary' => 'Ulasan lengkap peta pasar tenaga kerja Indonesia tahun 2026. Ketahui sektor industri yang sedang gencar membuka lowongan dan cara memenangkan persaingan kerja.',
                 'image' => 'assets/images/articles/loker-tren-2026.svg',
-                'author' => 'Tim HR SeaCV',
+                'author' => 'Team SeaCV',
                 'read_time' => '5 menit baca',
                 'views' => 1240,
                 'created_at' => '2026-09-01 10:00:00',
@@ -62,7 +62,7 @@ class ArticleService {
                 'category' => 'Tips CV',
                 'summary' => 'Masih bingung kapan harus memakai CV ATS dan kapan CV Desain Kreatif? Simak panduan komprehensif agar tidak salah format saat mengirimkan lamaran.',
                 'image' => 'assets/images/articles/cv-ats-vs-kreatif.svg',
-                'author' => 'Tim HR SeaCV',
+                'author' => 'Team SeaCV',
                 'read_time' => '4 menit baca',
                 'views' => 2180,
                 'created_at' => '2026-09-02 11:30:00',
@@ -109,7 +109,7 @@ class ArticleService {
                 'category' => 'Info HRD',
                 'summary' => 'Riset membuktikan rata-rata rekruter hanya meluangkan 6 sampai 8 detik untuk menilai sebuah CV. Inilah hal krusial yang dicari HRD dan cara lolos seleksi awal.',
                 'image' => 'assets/images/articles/rahasia-skrining-hrd.svg',
-                'author' => 'Tim HR SeaCV',
+                'author' => 'Team SeaCV',
                 'read_time' => '4 menit baca',
                 'views' => 3420,
                 'created_at' => '2026-09-03 09:15:00',
@@ -147,7 +147,7 @@ class ArticleService {
                 'category' => 'Syarat Berkas',
                 'summary' => 'Daftar dokumen wajib saat melamar kerja di perusahaan swasta maupun BUMN. Lengkap dengan urutan penyusunan dokumen PDF agar berkas Anda rapi dan resmi.',
                 'image' => 'assets/images/articles/syarat-berkas-lamaran.svg',
-                'author' => 'Tim HR SeaCV',
+                'author' => 'Team SeaCV',
                 'read_time' => '5 menit baca',
                 'views' => 1890,
                 'created_at' => '2026-09-04 14:00:00',
@@ -185,7 +185,7 @@ class ArticleService {
                 'category' => 'Tips Interview',
                 'summary' => 'Kuasai teknik menjawab pertanyaan jebakan saat interview HRD dan pelajari cara elegan menegosiasikan paket gaji tanpa khawatir ditolak.',
                 'image' => 'assets/images/articles/tips-wawancara-kerja.svg',
-                'author' => 'Tim HR SeaCV',
+                'author' => 'Team SeaCV',
                 'read_time' => '6 menit baca',
                 'views' => 2750,
                 'created_at' => '2026-09-05 08:45:00',
@@ -222,7 +222,7 @@ class ArticleService {
                 'category' => 'Surat Lamaran',
                 'summary' => 'Surat lamaran kerja adalah pengait awal sebelum HRD membuka CV Anda. Simak struktur 4 paragraf efektif yang membuat rekruter terpikat sejak baris pertama.',
                 'image' => 'assets/images/articles/surat-lamaran-efektif.svg',
-                'author' => 'Tim HR SeaCV',
+                'author' => 'Team SeaCV',
                 'read_time' => '4 menit baca',
                 'views' => 1560,
                 'created_at' => '2026-09-05 16:20:00',
@@ -271,7 +271,7 @@ class ArticleService {
                     summary TEXT NOT NULL,
                     content LONGTEXT NOT NULL,
                     image VARCHAR(255) NOT NULL,
-                    author VARCHAR(100) NOT NULL DEFAULT 'Tim HR SeaCV',
+                    author VARCHAR(100) NOT NULL DEFAULT 'Team SeaCV',
                     read_time VARCHAR(50) NOT NULL DEFAULT '4 menit baca',
                     views INT NOT NULL DEFAULT 0,
                     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
@@ -279,6 +279,9 @@ class ArticleService {
                     INDEX idx_slug (slug)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             ");
+
+            // Ensure author name is Team SeaCV
+            $pdo->exec("UPDATE articles SET author = 'Team SeaCV' WHERE author LIKE '%Tim HR%'");
 
             // Check if seeded
             $countStmt = $pdo->query("SELECT COUNT(*) FROM articles");
