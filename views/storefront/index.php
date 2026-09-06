@@ -3024,7 +3024,6 @@
     <!-- Keunggulan Layanan Bar -->
     <section class="metrics-section" id="keunggulan">
         <div class="metrics-header">
-            <span class="testimonials-badge">Nilai Lebih</span>
             <h3>Keunggulan Layanan SeaCV</h3>
             <p>Standar mutu tinggi untuk menjamin kepuasan, kerahasiaan, dan pengerjaan kilat dokumen lamaran Anda</p>
         </div>
