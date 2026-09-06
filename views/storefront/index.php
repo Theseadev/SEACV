@@ -3109,19 +3109,24 @@
                 font-weight: 800;
             }
 
-            /* Mulai Beli CTA highlight in Bottom Bar */
+            /* Mulai Beli CTA in Bottom Bar: Clean neutral when inactive */
             .bottom-bar-item.bottom-bar-cta {
-                color: #2563eb;
+                color: #64748b;
             }
 
             .bottom-bar-item.bottom-bar-cta .bottom-bar-icon {
-                background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-                color: #2563eb;
-                border: 1px solid rgba(37, 99, 235, 0.2);
+                background: transparent;
+                color: #64748b;
+                border: 1px solid transparent;
             }
 
             .bottom-bar-item.bottom-bar-cta span {
-                font-weight: 800;
+                font-weight: 600;
+                color: #64748b;
+            }
+
+            /* Only when active: Mulai Beli CTA glows with prominent blue */
+            .bottom-bar-item.bottom-bar-cta.active {
                 color: #2563eb;
             }
 
@@ -3129,10 +3134,16 @@
                 background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
                 color: #ffffff;
                 box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+                border: 1px solid rgba(37, 99, 235, 0.2);
             }
 
             .bottom-bar-item.bottom-bar-cta.active svg {
                 stroke: #ffffff;
+            }
+
+            .bottom-bar-item.bottom-bar-cta.active span {
+                color: #2563eb;
+                font-weight: 800;
             }
 
             /* Elevate Floating AI Button & Back to Top above bottom bar */
@@ -4688,33 +4699,86 @@
             const bottomItems = document.querySelectorAll('.bottom-bar-item');
             if (!bottomItems.length) return;
 
-            const sectionIds = ['katalog-layanan', 'keunggulan', 'cara-pemesanan', 'testimoni'];
-
-            function updateActiveTab() {
-                const scrollPos = window.scrollY + 220;
-                let activeId = '';
-
-                for (let i = 0; i < sectionIds.length; i++) {
-                    const el = document.getElementById(sectionIds[i]);
-                    if (el) {
-                        const top = el.offsetTop;
-                        const height = el.offsetHeight;
-                        if (scrollPos >= top && scrollPos < top + height + 120) {
-                            activeId = sectionIds[i];
-                        }
-                    }
-                }
-
+            function setActiveTab(id) {
+                if (!id) return;
                 bottomItems.forEach(item => {
-                    if (item.getAttribute('data-section') === activeId) {
+                    const sec = item.getAttribute('data-section');
+                    if (sec === id) {
                         item.classList.add('active');
-                    } else {
+                    } else if (sec !== 'artikel') {
                         item.classList.remove('active');
                     }
                 });
             }
 
+            function updateActiveTab() {
+                // 1. If at the bottom of the page, Testimoni is active
+                const scrollBottom = window.innerHeight + window.scrollY;
+                const docHeight = document.documentElement.scrollHeight;
+                if (scrollBottom >= docHeight - 90) {
+                    setActiveTab('testimoni');
+                    return;
+                }
+
+                // 2. If at the very top of the page (Hero / header area)
+                if (window.scrollY < 160) {
+                    setActiveTab('katalog-layanan');
+                    return;
+                }
+
+                // 3. Sections in physical order on the page
+                const orderedSections = [
+                    { id: 'keunggulan', el: document.getElementById('keunggulan') },
+                    { id: 'katalog-layanan', el: document.getElementById('katalog-layanan') },
+                    { id: 'cara-pemesanan', el: document.getElementById('cara-pemesanan') },
+                    { id: 'testimoni', el: document.getElementById('testimoni') }
+                ].filter(s => s.el !== null);
+
+                // Check using viewport trigger line (35% from top of screen)
+                const triggerPoint = window.innerHeight * 0.35;
+                let matchedId = null;
+
+                for (let i = 0; i < orderedSections.length; i++) {
+                    const rect = orderedSections[i].el.getBoundingClientRect();
+                    if (rect.top <= triggerPoint && rect.bottom > triggerPoint) {
+                        matchedId = orderedSections[i].id;
+                        break;
+                    }
+                }
+
+                // Fallback: which section has the largest visible area on screen right now
+                if (!matchedId) {
+                    let maxVisible = 0;
+                    orderedSections.forEach(sec => {
+                        const rect = sec.el.getBoundingClientRect();
+                        const vTop = Math.max(0, rect.top);
+                        const vBottom = Math.min(window.innerHeight, rect.bottom);
+                        const vHeight = Math.max(0, vBottom - vTop);
+                        if (vHeight > maxVisible) {
+                            maxVisible = vHeight;
+                            matchedId = sec.id;
+                        }
+                    });
+                }
+
+                if (matchedId) {
+                    setActiveTab(matchedId);
+                }
+            }
+
+            // Instant click feedback
+            bottomItems.forEach(item => {
+                const sec = item.getAttribute('data-section');
+                if (sec && sec !== 'artikel') {
+                    item.addEventListener('click', function() {
+                        setActiveTab(sec);
+                    });
+                }
+            });
+
             window.addEventListener('scroll', updateActiveTab, { passive: true });
+            window.addEventListener('resize', updateActiveTab, { passive: true });
+            updateActiveTab();
         })();
 
         // Auto Open Cart Drawer if redirected from other pages with ?open_cart=1
