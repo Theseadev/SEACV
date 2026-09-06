@@ -195,135 +195,104 @@ $pageTitle = 'Berita, Info Lowongan & Edukasi Karir Indonesia | SeaCV';
             box-shadow: 0 4px 14px rgba(37, 99, 235, 0.5);
         }
 
-        /* Filter Section (Modern Edge-to-Edge Responsive Chips) */
+        /* Filter Pills Section (Desktop / Laptop View: Floating white card) */
         .filter-section {
             max-width: 1280px;
-            margin: -20px auto 28px;
+            margin: -24px auto 36px;
             padding: 0 6%;
             position: relative;
             z-index: 10;
         }
 
-        .filter-scroll-wrapper {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            padding: 6px 2px 8px;
-        }
-
-        .filter-scroll-wrapper::-webkit-scrollbar {
-            display: none;
-        }
-
-        .filter-chips {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: nowrap;
-        }
-
-        .filter-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            padding: 9px 20px;
-            border-radius: var(--radius-pill);
-            font-size: 0.86rem;
-            font-weight: 600;
-            color: #475569;
+        .filter-card {
             background: #ffffff;
             border: 1px solid var(--border-color);
-            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
-            white-space: nowrap;
-            flex-shrink: 0;
-            text-decoration: none;
-            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .filter-chip svg {
-            flex-shrink: 0;
-            transition: stroke 0.2s ease, transform 0.2s ease;
-        }
-
-        .filter-chip:hover {
-            background: var(--primary-light);
-            border-color: #bfdbfe;
-            color: var(--primary);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
-        }
-
-        .filter-chip:active {
-            transform: scale(0.96);
-        }
-
-        .filter-chip.active {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            color: #ffffff;
-            border-color: transparent;
-            font-weight: 700;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.38);
-        }
-
-        .filter-chip.active svg {
-            stroke: #ffffff;
-        }
-
-        /* Articles Section Bar (Header & Count) */
-        .articles-section-bar {
+            border-radius: var(--radius-lg);
+            padding: 14px 20px;
+            box-shadow: var(--shadow-md);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 22px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-color);
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
-        .section-title-wrap {
+        .filter-scroll-wrapper {
             display: flex;
             align-items: center;
-            gap: 10px;
+            flex: 1;
+            min-width: 0;
         }
 
-        .section-title {
-            font-family: var(--font-heading);
-            font-size: 1.28rem;
-            font-weight: 800;
-            color: var(--text-main);
-            line-height: 1.2;
-            letter-spacing: -0.2px;
+        .filter-pills-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
-        .section-count-badge {
-            background: #eff6ff;
-            color: var(--primary);
-            border: 1px solid rgba(37, 99, 235, 0.2);
-            padding: 3px 10px;
+        .filter-pill {
+            padding: 8px 16px;
             border-radius: var(--radius-pill);
-            font-size: 0.76rem;
-            font-weight: 700;
-        }
-
-        .btn-reset-filter {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: #f1f5f9;
+            border: 1px solid transparent;
+            transition: var(--transition);
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #ef4444;
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            padding: 4px 12px;
-            border-radius: var(--radius-pill);
+            gap: 6px;
+            cursor: pointer;
             text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .filter-pill:hover {
+            background: #e2e8f0;
+            color: var(--text-main);
+        }
+
+        .filter-pill.active {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #ffffff;
+            border-color: rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Di laptop/PC, ikon di-hide agar persis seperti tampilan sebelumnya */
+        .filter-pill-icon {
+            display: none;
+        }
+
+        .filter-stats-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .filter-stats-text strong {
+            color: var(--primary);
+        }
+
+        .desktop-reset-link {
+            color: #ef4444;
+            text-decoration: none;
+            font-size: 0.82rem;
+            margin-left: 4px;
+            font-weight: 600;
             transition: var(--transition);
         }
 
-        .btn-reset-filter:hover {
-            background: #fee2e2;
-            color: #dc2626;
+        .desktop-reset-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Di laptop/PC, bar judul section tambahan disembunyikan agar tampilan bersih seperti sebelumnya */
+        .articles-section-bar {
+            display: none;
         }
 
         /* Main Content Container */
@@ -681,43 +650,121 @@ $pageTitle = 'Berita, Info Lowongan & Edukasi Karir Indonesia | SeaCV';
                 flex-shrink: 0;
             }
 
-            /* Responsive Modern Edge-to-Edge Filter Chips */
+            /* Responsive Modern Edge-to-Edge Filter Chips on Mobile */
             .filter-section {
                 margin: 10px 0 14px;
                 padding: 0 14px;
             }
+            .filter-card {
+                background: transparent;
+                border: none;
+                box-shadow: none;
+                padding: 0;
+                margin: 0;
+                display: block;
+                border-radius: 0;
+            }
+            .filter-stats-text {
+                display: none;
+            }
             .filter-scroll-wrapper {
                 margin: 0 -14px;
                 padding: 4px 14px 8px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
             }
-            .filter-chips {
+            .filter-scroll-wrapper::-webkit-scrollbar {
+                display: none;
+            }
+            .filter-pills-wrap {
+                display: flex;
                 gap: 8px;
+                flex-wrap: nowrap;
             }
-            .filter-chip {
+            .filter-pill {
                 padding: 7px 15px;
                 font-size: 0.8rem;
                 gap: 6px;
+                white-space: nowrap;
+                flex-shrink: 0;
+                border-radius: 20px;
+                background: #ffffff;
+                border: 1px solid var(--border-color);
+                box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
+                color: #475569;
             }
-            .filter-chip svg {
+            .filter-pill:hover {
+                background: var(--primary-light);
+                color: var(--primary);
+            }
+            .filter-pill.active {
+                background: linear-gradient(135deg, #2563eb, #1d4ed8);
+                color: #ffffff;
+                border-color: transparent;
+                box-shadow: 0 3px 10px rgba(37, 99, 235, 0.35);
+            }
+            .filter-pill-icon {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .filter-pill-icon svg {
                 width: 13px;
                 height: 13px;
+                stroke: currentColor;
+            }
+            .filter-pill.active .filter-pill-icon svg {
+                stroke: #ffffff;
             }
 
-            /* Section Title Bar on Mobile */
+            /* Section Title Bar on Mobile (Tampil di atas artikel grid khusus mobile) */
             .articles-section-bar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
                 margin-bottom: 16px;
                 padding-bottom: 10px;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .section-title-wrap {
+                display: flex;
+                align-items: center;
+                gap: 8px;
             }
             .section-title {
+                font-family: var(--font-heading);
                 font-size: 1.1rem;
+                font-weight: 700;
+                color: var(--text-main);
+                margin: 0;
             }
             .section-count-badge {
                 font-size: 0.72rem;
                 padding: 2px 8px;
+                border-radius: 20px;
+                background: #eff6ff;
+                color: var(--primary);
+                font-weight: 600;
+                border: 1px solid #bfdbfe;
             }
             .btn-reset-filter {
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
                 font-size: 0.74rem;
                 padding: 3px 9px;
+                border-radius: 20px;
+                background: #fef2f2;
+                color: #dc2626;
+                border: 1px solid #fecaca;
+                text-decoration: none;
+                font-weight: 600;
+            }
+            .btn-reset-filter:hover {
+                background: #fee2e2;
+                color: #dc2626;
             }
 
             /* Article Grid & Cards */
@@ -878,37 +925,47 @@ $pageTitle = 'Berita, Info Lowongan & Edukasi Karir Indonesia | SeaCV';
         </div>
     </header>
 
-    <!-- Filter Section (Responsive Modern Chips) -->
+    <!-- Filter Pills Section (Desktop: Floating Card | Mobile: Edge-to-Edge Swipeable) -->
     <section class="filter-section" aria-label="Filter Kategori Artikel">
-        <div class="filter-scroll-wrapper">
-            <div class="filter-chips">
-                <?php foreach ($categories as $cat): ?>
-                    <?php 
-                        $isActive = ($selectedCategory === $cat);
-                        $urlQuery = 'artikel.php?category=' . urlencode($cat);
-                        if (!empty($searchQuery)) {
-                            $urlQuery .= '&search=' . urlencode($searchQuery);
-                        }
-                    ?>
-                    <a href="<?= $urlQuery ?>" class="filter-chip <?= $isActive ? 'active' : '' ?>">
-                        <?php if ($cat === 'Semua'): ?>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
-                        <?php elseif ($cat === 'Info Loker'): ?>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                        <?php elseif ($cat === 'Tips CV'): ?>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
-                        <?php elseif ($cat === 'Info HRD'): ?>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                        <?php elseif ($cat === 'Syarat Berkas'): ?>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-                        <?php elseif ($cat === 'Tips Interview'): ?>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/></svg>
-                        <?php elseif ($cat === 'Surat Lamaran'): ?>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                        <?php endif; ?>
-                        <span><?= htmlspecialchars($cat) ?></span>
-                    </a>
-                <?php endforeach; ?>
+        <div class="filter-card">
+            <div class="filter-scroll-wrapper">
+                <div class="filter-pills-wrap">
+                    <?php foreach ($categories as $cat): ?>
+                        <?php 
+                            $isActive = ($selectedCategory === $cat);
+                            $urlQuery = 'artikel.php?category=' . urlencode($cat);
+                            if (!empty($searchQuery)) {
+                                $urlQuery .= '&search=' . urlencode($searchQuery);
+                            }
+                        ?>
+                        <a href="<?= $urlQuery ?>" class="filter-pill <?= $isActive ? 'active' : '' ?>">
+                            <span class="filter-pill-icon">
+                                <?php if ($cat === 'Semua'): ?>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
+                                <?php elseif ($cat === 'Info Loker'): ?>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                                <?php elseif ($cat === 'Tips CV'): ?>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                <?php elseif ($cat === 'Info HRD'): ?>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                <?php elseif ($cat === 'Syarat Berkas'): ?>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                                <?php elseif ($cat === 'Tips Interview'): ?>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/></svg>
+                                <?php elseif ($cat === 'Surat Lamaran'): ?>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                                <?php endif; ?>
+                            </span>
+                            <span><?= htmlspecialchars($cat) ?></span>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <div class="filter-stats-text">
+                Menampilkan <strong><?= count($articles) ?></strong> Pembahasan
+                <?php if ((!empty($selectedCategory) && $selectedCategory !== 'Semua') || !empty($searchQuery)): ?>
+                    • <a href="artikel.php" class="desktop-reset-link" title="Reset filter & pencarian">Reset Filter</a>
+                <?php endif; ?>
             </div>
         </div>
     </section>
