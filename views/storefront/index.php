@@ -62,7 +62,7 @@
             scroll-padding-top: 96px;
         }
 
-        section[id], div[id] {
+        section[id], div[id], main[id] {
             scroll-margin-top: 96px;
         }
 
@@ -4779,6 +4779,47 @@
             window.addEventListener('scroll', updateActiveTab, { passive: true });
             window.addEventListener('resize', updateActiveTab, { passive: true });
             updateActiveTab();
+        })();
+
+        // ============================================================
+        // Auto Smooth Scroll ke "Mulai Beli" (#katalog-layanan) saat pengunjung baru masuk
+        // ============================================================
+        (function() {
+            const currentHash = window.location.hash;
+            const searchParams = new URLSearchParams(window.location.search);
+
+            // Jangan scroll otomatis jika ada query search, category filter, atau open_cart
+            if (searchParams.has('search') || searchParams.has('category') || searchParams.has('open_cart')) {
+                return;
+            }
+
+            // Hanya aktif jika pengunjung masuk ke beranda tanpa hash lain (#keunggulan, #testimoni, dll.)
+            if (!currentHash || currentHash === '#katalog-layanan') {
+                function triggerAutoScroll() {
+                    setTimeout(function() {
+                        // Jika pengunjung sudah mulai scroll manual sendiri dalam waktu jeda, jangan potong
+                        if (window.pageYOffset > 80) return;
+
+                        const target = document.getElementById('katalog-layanan');
+                        if (target) {
+                            const headerOffset = 90;
+                            const elementPosition = target.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                            window.scrollTo({
+                                top: offsetPosition,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }, 450); // Jeda 450ms agar pengunjung melihat sekilas tampilan atas sebelum meluncur mulus ke katalog
+                }
+
+                if (document.readyState === 'complete') {
+                    triggerAutoScroll();
+                } else {
+                    window.addEventListener('load', triggerAutoScroll);
+                }
+            }
         })();
 
         // Auto Open Cart Drawer if redirected from other pages with ?open_cart=1
