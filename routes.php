@@ -15,18 +15,19 @@ Flight::route('GET /', [StorefrontController::class, 'index']);
 Flight::route('GET /index.php', [StorefrontController::class, 'index']);
 
 // -----------------------------------------------------------------------------
-// 2. Authentication Routes
+// 2. Authentication Routes (Secret Hidden Admin Portal: /seaadmin)
 // -----------------------------------------------------------------------------
-Flight::route('GET /login', [AuthController::class, 'showLogin']);
-Flight::route('POST /login', [AuthController::class, 'login']);
-Flight::route('GET|POST /login.php', function() {
-    $auth = new AuthController();
-    if (Flight::request()->method === 'POST') {
-        $auth->login();
-    } else {
-        $auth->showLogin();
-    }
+Flight::route('GET /seaadmin', [AuthController::class, 'showLogin']);
+Flight::route('POST /seaadmin', [AuthController::class, 'login']);
+
+// Explicitly 404 any public /login attempts to keep admin hidden
+Flight::route('GET|POST /login', function() {
+    Flight::notFound();
 });
+Flight::route('GET|POST /login.php', function() {
+    Flight::notFound();
+});
+
 Flight::route('GET /logout', [AuthController::class, 'logout']);
 Flight::route('GET /logout.php', [AuthController::class, 'logout']);
 

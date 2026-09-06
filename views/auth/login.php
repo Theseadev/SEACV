@@ -233,7 +233,7 @@
                 </div>
             <?php endif; ?>
 
-            <form action="<?= url('/login') ?>" method="post">
+            <form action="<?= url('/seaadmin') ?>" method="post">
                 <div class="adm-form-group">
                     <label class="adm-label" for="username">Username</label>
                     <input type="text" id="username" name="username" class="adm-input" 

@@ -6,7 +6,8 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Check if the user is logged in
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location: login.php");
+    require_once __DIR__ . '/helpers.php';
+    header("Location: " . url('/seaadmin'));
     exit;
 }
 ?>

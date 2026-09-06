@@ -90,6 +90,6 @@ class AuthController {
         }
         session_destroy();
 
-        Flight::redirect(url('/login'));
+        Flight::redirect(url('/seaadmin'));
     }
 }
