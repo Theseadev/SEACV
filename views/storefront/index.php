@@ -3222,6 +3222,7 @@
             <a href="#keunggulan" class="nav-link-item">Keunggulan</a>
             <a href="#cara-pemesanan" class="nav-link-item">Cara Pemesanan</a>
             <a href="#testimoni" class="nav-link-item">Testimoni</a>
+            <a href="artikel.php" class="nav-link-item">Berita &amp; Artikel</a>
         </div>
 
         <div class="nav-actions">
@@ -3873,6 +3874,17 @@
                 </svg>
             </div>
             <span>Testimoni</span>
+        </a>
+        <a href="artikel.php" class="bottom-bar-item" data-section="artikel">
+            <div class="bottom-bar-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+                    <path d="M6 6h10"></path>
+                    <path d="M6 10h10"></path>
+                    <path d="M6 14h6"></path>
+                </svg>
+            </div>
+            <span>Artikel</span>
         </a>
     </nav>
 

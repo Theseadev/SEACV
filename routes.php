@@ -6,6 +6,7 @@ use App\Controllers\AdminController;
 use App\Controllers\ProductController;
 use App\Controllers\AuthController;
 use App\Controllers\ApiController;
+use App\Controllers\ArticleController;
 use App\Middleware\AuthMiddleware;
 
 // -----------------------------------------------------------------------------
@@ -13,6 +14,18 @@ use App\Middleware\AuthMiddleware;
 // -----------------------------------------------------------------------------
 Flight::route('GET /', [StorefrontController::class, 'index']);
 Flight::route('GET /index.php', [StorefrontController::class, 'index']);
+
+// Article & Career Education Routes
+Flight::route('GET /artikel', [ArticleController::class, 'index']);
+Flight::route('GET /artikel.php', [ArticleController::class, 'index']);
+Flight::route('GET /artikel/@slug', function($slug) {
+    (new ArticleController())->show($slug);
+});
+Flight::route('GET /berita', [ArticleController::class, 'index']);
+Flight::route('GET /berita.php', [ArticleController::class, 'index']);
+Flight::route('GET /berita/@slug', function($slug) {
+    (new ArticleController())->show($slug);
+});
 
 // -----------------------------------------------------------------------------
 // 2. Authentication Routes (Secret Hidden Admin Portal: /seaadmin)
