@@ -3490,9 +3490,10 @@
                             </div>
 
                             <div class="product-actions-dock">
-                                <a href="https://wa.me/+62895396356914?text=Halo%20Admin%20SeaCV,%20saya%20tertarik%20pesan%20*<?= urlencode($displayName) ?>*%20seharga%20*Rp%2010.000*.%20Mohon%20segera%20diproses." 
+                                <a href="https://wa.me/62895396356914?text=Halo%20Admin%20SeaCV,%20saya%20tertarik%20pesan%20*<?= urlencode($displayName) ?>*%20seharga%20*Rp%2010.000*.%20Mohon%20segera%20diproses." 
                                    class="btn-order-wa" 
-                                   target="_blank">
+                                   target="_blank"
+                                   onclick="orderDirectWhatsApp(event, '<?= htmlspecialchars(addslashes($displayName)) ?>')">
                                     <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M12.031 2C6.505 2 2.012 6.487 2.01 12.014a10.015 10.015 0 001.536 5.346L2 22l4.802-1.507A10.01 10.01 0 0012.031 22c5.526 0 10.019-4.487 10.02-10.015A10.027 10.027 0 0012.031 2zm5.836 14.185c-.244.688-1.42 1.314-1.956 1.4-.492.079-1.127.135-3.567-.84-2.946-1.183-4.834-4.184-4.981-4.38-.147-.197-1.194-1.585-1.194-3.023 0-1.439.755-2.146 1.023-2.438.268-.293.585-.366.78-.366.195 0 .39.002.56.01.18.008.42-.068.657.502.244.585.83 2.025.903 2.172.073.147.122.317.024.512-.097.195-.146.317-.292.488-.147.17-.309.38-.44.51-.147.146-.3.305-.13.597.17.293.758 1.25 1.626 2.023 1.118.997 2.06 1.306 2.353 1.452.293.146.464.122.635-.073.17-.195.732-.854.928-1.147.195-.293.39-.244.659-.146.268.098 1.708.805 2 .952.293.146.488.22.561.341.073.122.073.708-.171 1.396z"/>
                                     </svg>
@@ -4227,7 +4228,55 @@
             renderCart();
             toggleCartDrawer();
 
-            window.open('https://wa.me/+62895396356914?text=' + encodeURIComponent(message), '_blank');
+            sendWhatsAppDirect(message);
+        }
+
+        // ============================================================
+        // Direct WhatsApp Opener (Bypass Intermediate Landing Page)
+        // ============================================================
+        const SEACV_WA_NUMBER = '62895396356914';
+
+        function sendWhatsAppDirect(message) {
+            const phone = SEACV_WA_NUMBER;
+            const encoded = encodeURIComponent(message);
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+            if (isMobile) {
+                // Pada HP/Tablet: Langsung pemicu aplikasi native WhatsApp
+                // whatsapp:// protocol langsung membuka aplikasi WhatsApp tanpa perantara web browser
+                const waNativeUrl = `whatsapp://send?phone=${phone}&text=${encoded}`;
+                const waWebFallback = `https://wa.me/${phone}?text=${encoded}`;
+                const startTime = Date.now();
+
+                window.location.href = waNativeUrl;
+
+                // Fallback jika aplikasi WhatsApp belum terpasang di HP
+                setTimeout(function() {
+                    if (Date.now() - startTime < 2000) {
+                        window.location.href = waWebFallback;
+                    }
+                }, 1200);
+            } else {
+                // Pada Desktop / Laptop: Langsung buka WhatsApp Web di tab baru
+                // Menghindari halaman landing page api.whatsapp.com yang menakutkan bagi orang awam
+                const waWebUrl = `https://web.whatsapp.com/send?phone=${phone}&text=${encoded}`;
+                window.open(waWebUrl, '_blank');
+            }
+        }
+
+        function orderDirectWhatsApp(event, productName) {
+            if (event) {
+                event.preventDefault();
+            }
+            const message = `Halo Admin SeaCV, saya tertarik pesan *${productName}* seharga *Rp 10.000*. Mohon segera diproses.`;
+            sendWhatsAppDirect(message);
+        }
+
+        function handleAiWaClick(event, message) {
+            if (event) {
+                event.preventDefault();
+            }
+            sendWhatsAppDirect(message);
         }
 
         // ============================================================
@@ -4374,7 +4423,7 @@
                 setTimeout(() => {
                     hideTypingIndicator();
                     appendBotMessage(
-                        `Siap! Kamu bisa langsung konsultasi privat atau kirim materi CV ke admin WhatsApp kami:<br><a href="https://wa.me/+62895396356914?text=Halo%20Admin%20SeaCV,%20saya%20ingin%20konsultasi%20pembuatan%20dokumen%20karir" target="_blank" class="chat-connect-wa-btn"><span>Hubungi WhatsApp: +62 895-3963-56914</span></a>`,
+                        `Siap! Kamu bisa langsung konsultasi privat atau kirim materi CV ke admin WhatsApp kami:<br><a href="https://wa.me/62895396356914?text=Halo%20Admin%20SeaCV,%20saya%20ingin%20konsultasi%20pembuatan%20dokumen%20karir" onclick="handleAiWaClick(event, 'Halo Admin SeaCV, saya ingin konsultasi pembuatan dokumen karir')" target="_blank" class="chat-connect-wa-btn"><span>Hubungi WhatsApp: +62 895-3963-56914</span></a>`,
                         ['⚡ Berapa lama pengerjaan CV?', '📄 Beda CV ATS vs CV Kreatif?']
                     );
                 }, 400);
@@ -4486,7 +4535,7 @@
             else if (q.includes('admin') || q.includes('wa') || q.includes('whatsapp') || q.includes('manusia') || q.includes('cs') || q.includes('kontak') || q.includes('nomor') || q.includes('telepon') || q.includes('hubungi')) {
                 reply = `💬 <b>Hubungi Admin WhatsApp SeaCV:</b><br><br>
                 Admin kami siap melayani konsultasi dan pemesanan secara personal di WhatsApp resmi:<br>
-                <a href="https://wa.me/+62895396356914?text=Halo%20Admin%20SeaCV,%20saya%20ingin%20konsultasi%20pembuatan%20dokumen%20karir" target="_blank" class="chat-connect-wa-btn"><span>Chat WhatsApp Sekarang (+62 895-3963-56914)</span></a>`;
+                <a href="https://wa.me/62895396356914?text=Halo%20Admin%20SeaCV,%20saya%20ingin%20konsultasi%20pembuatan%20dokumen%20karir" onclick="handleAiWaClick(event, 'Halo Admin SeaCV, saya ingin konsultasi pembuatan dokumen karir')" target="_blank" class="chat-connect-wa-btn"><span>Chat WhatsApp Sekarang (+62 895-3963-56914)</span></a>`;
                 followUpChips = ['⚡ Berapa lama pengerjaan CV?', '💰 Berapa harga promo saat ini?'];
             } 
             else if (q.includes('halo') || q.includes('hai') || q.includes('hello') || q.includes('assalamualaikum') || q.includes('pagi') || q.includes('siang') || q.includes('sore') || q.includes('malam') || q.includes('permisi')) {
@@ -4499,7 +4548,7 @@
             } 
             else {
                 reply = `Terima kasih pertanyaannya kak! Untuk konsultasi detail atau request custom, kamu bisa langsung terhubung dengan tim admin resmi SeaCV via WhatsApp ya:<br><br>
-                <a href="https://wa.me/+62895396356914?text=Halo%20Admin%20SeaCV,%20saya%20ingin%20bertanya%20tentang:%20${encodeURIComponent(query)}" target="_blank" class="chat-connect-wa-btn"><span>Chat Admin WhatsApp Langsung</span></a>`;
+                <a href="https://wa.me/62895396356914?text=Halo%20Admin%20SeaCV,%20saya%20ingin%20bertanya%20tentang:%20${encodeURIComponent(query)}" onclick="handleAiWaClick(event, 'Halo Admin SeaCV, saya ingin bertanya tentang: ' + encodeURIComponent('${query.replace(/['\"\\\n\r]/g, ' ')}'))" target="_blank" class="chat-connect-wa-btn"><span>Chat Admin WhatsApp Langsung</span></a>`;
                 followUpChips = [
                     '⚡ Berapa lama pengerjaan CV?',
                     '📄 Beda CV ATS vs CV Kreatif?',

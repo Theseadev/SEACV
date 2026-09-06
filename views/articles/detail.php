@@ -676,7 +676,7 @@ $pageTitle = $article['title'] . ' | SeaCV';
                         $currentUrl = "{$scheme}://{$host}{$uri}";
                         $waText = urlencode($article['title'] . " - Baca selengkapnya di SeaCV: " . $currentUrl);
                     ?>
-                    <a href="https://api.whatsapp.com/send?text=<?= $waText ?>" target="_blank" rel="noopener" class="btn-share wa">
+                    <a href="https://wa.me/?text=<?= $waText ?>" target="_blank" rel="noopener" class="btn-share wa" onclick="shareArticleWA(event, '<?= htmlspecialchars(addslashes($article['title'] . ' - Baca selengkapnya di SeaCV: ' . $currentUrl)) ?>')">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
                         <span>WhatsApp</span>
                     </a>
@@ -779,6 +779,17 @@ $pageTitle = $article['title'] . ' | SeaCV';
     </nav>
 
     <script>
+        function shareArticleWA(event, text) {
+            if (event) event.preventDefault();
+            const encoded = encodeURIComponent(text);
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            if (isMobile) {
+                window.location.href = `whatsapp://send?text=${encoded}`;
+            } else {
+                window.open(`https://web.whatsapp.com/send?text=${encoded}`, '_blank');
+            }
+        }
+
         function copyArticleLink() {
             const url = window.location.href;
             navigator.clipboard.writeText(url).then(() => {
