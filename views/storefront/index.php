@@ -2395,42 +2395,90 @@
                 margin: 20px auto 0;
                 padding: 0 14px;
             }
-            /* Trust Stats Bar (Mobile Responsive) */
+            /* Trust Stats Bar (Mobile: 2x2 Grid Layout) */
             .trust-stats-bar {
-                padding: 12px 6px;
-                margin-bottom: 22px;
-                gap: 4px;
-                border-radius: 12px;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                padding: 14px 10px;
+                margin-bottom: 24px;
+                border-radius: 14px;
+            }
+            .trust-stat-divider {
+                display: none;
             }
             .trust-stat-item {
+                display: flex;
                 flex-direction: column;
+                align-items: center;
                 text-align: center;
+                background: #f8fafc;
+                border: 1px solid var(--border-color);
+                border-radius: 10px;
+                padding: 10px 6px;
                 gap: 4px;
-                padding: 0 2px;
+                min-width: 0;
             }
             .trust-stat-icon {
                 width: 32px;
                 height: 32px;
                 border-radius: 8px;
+                margin-bottom: 1px;
             }
             .trust-stat-icon svg {
                 width: 16px;
                 height: 16px;
             }
+            .trust-stat-content {
+                align-items: center;
+                min-width: 0;
+                width: 100%;
+            }
             .trust-stat-label {
-                font-size: 0.66rem;
-                line-height: 1.2;
+                font-size: 0.68rem;
+                line-height: 1.25;
                 white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
             }
             .trust-stat-value {
-                font-size: 1.15rem;
+                font-size: 1.18rem;
                 justify-content: center;
+                white-space: nowrap;
             }
             .stat-unit {
                 font-size: 0.72rem;
             }
-            .trust-stat-divider {
-                height: 34px;
+
+            /* Layar Ekstra Kecil (<= 375px) Otomatis Perkecil */
+            @media (max-width: 375px) {
+                .trust-stats-bar {
+                    gap: 8px 6px;
+                    padding: 10px 6px;
+                }
+                .trust-stat-item {
+                    padding: 8px 4px;
+                    gap: 3px;
+                }
+                .trust-stat-icon {
+                    width: 26px;
+                    height: 26px;
+                    border-radius: 6px;
+                }
+                .trust-stat-icon svg {
+                    width: 13px;
+                    height: 13px;
+                }
+                .trust-stat-label {
+                    font-size: 0.62rem;
+                }
+                .trust-stat-value {
+                    font-size: 1.05rem;
+                }
+                .stat-unit {
+                    font-size: 0.65rem;
+                }
             }
             .metrics-header {
                 margin-bottom: 18px;
@@ -3198,6 +3246,20 @@
                     <div class="trust-stat-value">
                         <span class="stat-number" data-target="30">0</span>
                         <span class="stat-unit">Menit</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trust-stat-divider"></div>
+
+            <div class="trust-stat-item">
+                <div class="trust-stat-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                </div>
+                <div class="trust-stat-content">
+                    <span class="trust-stat-label">Terpercaya Sejak :</span>
+                    <div class="trust-stat-value">
+                        <span class="stat-number" data-target="2025">0</span>
                     </div>
                 </div>
             </div>
