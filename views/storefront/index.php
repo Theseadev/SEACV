@@ -4678,18 +4678,12 @@
             });
         }
 
-        // Initialize cart & remember scroll position
+        // Initialize cart
         window.addEventListener('load', () => {
             renderCart();
-            const savedScroll = localStorage.getItem('seacv_scroll_y');
-            if (savedScroll !== null) {
-                window.scrollTo(0, parseInt(savedScroll));
+            try {
                 localStorage.removeItem('seacv_scroll_y');
-            }
-        });
-
-        window.addEventListener('beforeunload', () => {
-            localStorage.setItem('seacv_scroll_y', window.scrollY);
+            } catch (e) {}
         });
 
         // ============================================================
@@ -4782,9 +4776,13 @@
         })();
 
         // ============================================================
-        // Auto Smooth Scroll ke "Mulai Beli" (#katalog-layanan) saat pengunjung baru masuk
+        // Auto Smooth Scroll ke "Mulai Beli" / Header Panel Katalog (Gambar 3) saat pengunjung baru masuk
         // ============================================================
         (function() {
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
+
             const currentHash = window.location.hash;
             const searchParams = new URLSearchParams(window.location.search);
 
@@ -4793,25 +4791,45 @@
                 return;
             }
 
-            // Hanya aktif jika pengunjung masuk ke beranda tanpa hash lain (#keunggulan, #testimoni, dll.)
+            // Hanya aktif jika pengunjung masuk ke beranda tanpa hash section lain (#keunggulan, #testimoni, dll.)
             if (!currentHash || currentHash === '#katalog-layanan') {
+                let userScrolled = false;
+                const onUserInteract = function() {
+                    userScrolled = true;
+                    cleanupListeners();
+                };
+
+                function cleanupListeners() {
+                    window.removeEventListener('wheel', onUserInteract);
+                    window.removeEventListener('touchmove', onUserInteract);
+                    window.removeEventListener('keydown', onUserInteract);
+                }
+
+                window.addEventListener('wheel', onUserInteract, { passive: true });
+                window.addEventListener('touchmove', onUserInteract, { passive: true });
+                window.addEventListener('keydown', onUserInteract, { passive: true });
+
                 function triggerAutoScroll() {
                     setTimeout(function() {
-                        // Jika pengunjung sudah mulai scroll manual sendiri dalam waktu jeda, jangan potong
-                        if (window.pageYOffset > 80) return;
+                        cleanupListeners();
+                        if (userScrolled) return;
 
-                        const target = document.getElementById('katalog-layanan');
+                        // Target tepat pada panel header katalog ("Katalog Template & Layanan" - Gambar 3)
+                        const target = document.querySelector('.catalog-header-panel') || document.getElementById('katalog-layanan');
                         if (target) {
-                            const headerOffset = 90;
-                            const elementPosition = target.getBoundingClientRect().top;
-                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                            const navbar = document.querySelector('.navbar');
+                            const navHeight = navbar ? navbar.offsetHeight : (window.innerWidth <= 768 ? 64 : 80);
+                            const rect = target.getBoundingClientRect();
+                            const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                            // Posisikan bagian paling atas panel header katalog tepat 8-12px di bawah navbar
+                            const targetTop = rect.top + currentScrollTop - navHeight - 10;
 
                             window.scrollTo({
-                                top: offsetPosition,
+                                top: Math.max(0, targetTop),
                                 behavior: 'smooth'
                             });
                         }
-                    }, 450); // Jeda 450ms agar pengunjung melihat sekilas tampilan atas sebelum meluncur mulus ke katalog
+                    }, 400); // Jeda 400ms agar halaman dan font siap lalu meluncur mulus tepat ke Gambar 3
                 }
 
                 if (document.readyState === 'complete') {
