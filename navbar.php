@@ -110,6 +110,10 @@ $homePrefix = $isHomepage ? '' : 'index.php';
     border-radius: 2px;
 }
 
+.nav-cta-btn.active::after {
+    display: none !important;
+}
+
 /* Prominent Blue CTA Button with Vibration Animation */
 .nav-cta-btn {
     background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
@@ -272,10 +276,10 @@ $homePrefix = $isHomepage ? '' : 'index.php';
     </a>
 
     <div class="nav-links">
-        <a href="<?= $homePrefix ?>#katalog-layanan" class="nav-link-item nav-cta-btn">Mulai Beli!</a>
-        <a href="<?= $homePrefix ?>#keunggulan" class="nav-link-item">Keunggulan</a>
-        <a href="<?= $homePrefix ?>#cara-pemesanan" class="nav-link-item">Cara Pemesanan</a>
-        <a href="<?= $homePrefix ?>#testimoni" class="nav-link-item">Testimoni</a>
+        <a href="<?= $homePrefix ?>#katalog-layanan" class="nav-link-item nav-cta-btn" data-section="katalog-layanan">Mulai Beli!</a>
+        <a href="<?= $homePrefix ?>#keunggulan" class="nav-link-item" data-section="keunggulan">Keunggulan</a>
+        <a href="<?= $homePrefix ?>#cara-pemesanan" class="nav-link-item" data-section="cara-pemesanan">Cara Pemesanan</a>
+        <a href="<?= $homePrefix ?>#testimoni" class="nav-link-item" data-section="testimoni">Testimoni</a>
         <a href="artikel.php" class="nav-link-item <?= $isArticlePage ? 'active' : '' ?>">Berita &amp; Artikel</a>
     </div>
 

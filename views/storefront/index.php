@@ -4687,14 +4687,18 @@
         });
 
         // ============================================================
-        // Mobile Bottom Bar Active Spy & Smooth Navigation
+        // Unified Navigation Scroll Spy & Smooth Navigation
         // ============================================================
-        (function initMobileBottomBar() {
-            const bottomItems = document.querySelectorAll('.bottom-bar-item');
-            if (!bottomItems.length) return;
+        (function initNavScrollSpy() {
+            const bottomItems = document.querySelectorAll('.bottom-bar-item[data-section]');
+            const navItems = document.querySelectorAll('.nav-links .nav-link-item[data-section]');
+
+            if (!bottomItems.length && !navItems.length) return;
+
+            let isClickLocked = false;
+            let unlockTimer = null;
 
             function setActiveTab(id) {
-                if (!id) return;
                 bottomItems.forEach(item => {
                     const sec = item.getAttribute('data-section');
                     if (sec === id) {
@@ -4703,24 +4707,41 @@
                         item.classList.remove('active');
                     }
                 });
+
+                navItems.forEach(item => {
+                    const sec = item.getAttribute('data-section');
+                    if (sec === id) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            }
+
+            function lockActiveTab(id) {
+                if (!id) return;
+                setActiveTab(id);
+                isClickLocked = true;
+                clearTimeout(unlockTimer);
+                // Safety fallback timeout if scrolling doesn't trigger
+                unlockTimer = setTimeout(() => {
+                    isClickLocked = false;
+                    updateActiveTab();
+                }, 1200);
             }
 
             function updateActiveTab() {
-                // 1. If at the bottom of the page, Testimoni is active
+                if (isClickLocked) return;
+
+                // 1. If at the bottom of the page, Testimoni is guaranteed active
                 const scrollBottom = window.innerHeight + window.scrollY;
                 const docHeight = document.documentElement.scrollHeight;
-                if (scrollBottom >= docHeight - 90) {
+                if (scrollBottom >= docHeight - 80) {
                     setActiveTab('testimoni');
                     return;
                 }
 
-                // 2. If at the very top of the page (Hero / header area)
-                if (window.scrollY < 160) {
-                    setActiveTab('katalog-layanan');
-                    return;
-                }
-
-                // 3. Sections in physical order on the page
+                // 2. Sections in physical order on the page
                 const orderedSections = [
                     { id: 'keunggulan', el: document.getElementById('keunggulan') },
                     { id: 'katalog-layanan', el: document.getElementById('katalog-layanan') },
@@ -4728,51 +4749,123 @@
                     { id: 'testimoni', el: document.getElementById('testimoni') }
                 ].filter(s => s.el !== null);
 
-                // Check using viewport trigger line (35% from top of screen)
-                const triggerPoint = window.innerHeight * 0.35;
+                // Reference line positioned just below the sticky navbar
+                const navbar = document.querySelector('.navbar');
+                const navHeight = navbar ? navbar.offsetHeight : (window.innerWidth <= 768 ? 64 : 80);
+                const refLine = navHeight + 50;
+
                 let matchedId = null;
 
+                // Match section intersecting the reading reference line
                 for (let i = 0; i < orderedSections.length; i++) {
                     const rect = orderedSections[i].el.getBoundingClientRect();
-                    if (rect.top <= triggerPoint && rect.bottom > triggerPoint) {
+                    if (rect.top <= refLine && rect.bottom > refLine) {
                         matchedId = orderedSections[i].id;
                         break;
                     }
                 }
 
-                // Fallback: which section has the largest visible area on screen right now
+                // Fallback if between sections
                 if (!matchedId) {
-                    let maxVisible = 0;
-                    orderedSections.forEach(sec => {
-                        const rect = sec.el.getBoundingClientRect();
-                        const vTop = Math.max(0, rect.top);
-                        const vBottom = Math.min(window.innerHeight, rect.bottom);
-                        const vHeight = Math.max(0, vBottom - vTop);
-                        if (vHeight > maxVisible) {
-                            maxVisible = vHeight;
-                            matchedId = sec.id;
+                    if (orderedSections.length > 0 && orderedSections[0].el.getBoundingClientRect().top > refLine) {
+                        // User is above the first section (in Hero slider)
+                        if (window.location.hash === '#katalog-layanan') {
+                            matchedId = 'katalog-layanan';
+                        } else {
+                            matchedId = null;
                         }
-                    });
+                    } else {
+                        // Section with largest visible area below navbar
+                        let maxVisible = 0;
+                        orderedSections.forEach(sec => {
+                            const rect = sec.el.getBoundingClientRect();
+                            const vTop = Math.max(navHeight, rect.top);
+                            const vBottom = Math.min(window.innerHeight, rect.bottom);
+                            const vHeight = Math.max(0, vBottom - vTop);
+                            if (vHeight > maxVisible) {
+                                maxVisible = vHeight;
+                                matchedId = sec.id;
+                            }
+                        });
+                    }
                 }
 
-                if (matchedId) {
-                    setActiveTab(matchedId);
-                }
+                setActiveTab(matchedId);
             }
 
-            // Instant click feedback
+            // Click handlers for bottom bar items
             bottomItems.forEach(item => {
                 const sec = item.getAttribute('data-section');
                 if (sec && sec !== 'artikel') {
                     item.addEventListener('click', function() {
-                        setActiveTab(sec);
+                        if (typeof window.cancelStorefrontAutoScroll === 'function') {
+                            window.cancelStorefrontAutoScroll();
+                        }
+                        lockActiveTab(sec);
                     });
                 }
             });
 
-            window.addEventListener('scroll', updateActiveTab, { passive: true });
+            // Click handlers for desktop navbar items
+            navItems.forEach(item => {
+                const sec = item.getAttribute('data-section');
+                if (sec && sec !== 'artikel') {
+                    item.addEventListener('click', function() {
+                        if (typeof window.cancelStorefrontAutoScroll === 'function') {
+                            window.cancelStorefrontAutoScroll();
+                        }
+                        lockActiveTab(sec);
+                    });
+                }
+            });
+
+            // Scroll listener with debounced unlock
+            window.addEventListener('scroll', function() {
+                if (isClickLocked) {
+                    clearTimeout(unlockTimer);
+                    unlockTimer = setTimeout(() => {
+                        isClickLocked = false;
+                        updateActiveTab();
+                    }, 140);
+                    return;
+                }
+                updateActiveTab();
+            }, { passive: true });
+
+            // Native scrollend support
+            if ('onscrollend' in window) {
+                window.addEventListener('scrollend', function() {
+                    if (isClickLocked) {
+                        clearTimeout(unlockTimer);
+                        isClickLocked = false;
+                        updateActiveTab();
+                    }
+                }, { passive: true });
+            }
+
+            // Immediate unlock when user manually scrolls or touches
+            function onManualUserScroll() {
+                if (isClickLocked) {
+                    clearTimeout(unlockTimer);
+                    isClickLocked = false;
+                    updateActiveTab();
+                }
+            }
+            window.addEventListener('wheel', onManualUserScroll, { passive: true });
+            window.addEventListener('touchstart', onManualUserScroll, { passive: true });
             window.addEventListener('resize', updateActiveTab, { passive: true });
-            updateActiveTab();
+
+            // Initial active tab determination
+            if (window.location.hash) {
+                const initHash = window.location.hash.replace('#', '');
+                if (['keunggulan', 'katalog-layanan', 'cara-pemesanan', 'testimoni'].includes(initHash)) {
+                    setActiveTab(initHash);
+                } else {
+                    updateActiveTab();
+                }
+            } else {
+                updateActiveTab();
+            }
         })();
 
         // ============================================================
@@ -4799,15 +4892,21 @@
                     cleanupListeners();
                 };
 
+                window.cancelStorefrontAutoScroll = onUserInteract;
+
                 function cleanupListeners() {
                     window.removeEventListener('wheel', onUserInteract);
                     window.removeEventListener('touchmove', onUserInteract);
                     window.removeEventListener('keydown', onUserInteract);
+                    window.removeEventListener('mousedown', onUserInteract);
+                    window.removeEventListener('touchstart', onUserInteract);
                 }
 
                 window.addEventListener('wheel', onUserInteract, { passive: true });
                 window.addEventListener('touchmove', onUserInteract, { passive: true });
                 window.addEventListener('keydown', onUserInteract, { passive: true });
+                window.addEventListener('mousedown', onUserInteract, { passive: true });
+                window.addEventListener('touchstart', onUserInteract, { passive: true });
 
                 function triggerAutoScroll() {
                     setTimeout(function() {
