@@ -14,7 +14,7 @@ $pageTitle = 'Berita, Info Lowongan & Edukasi Karir Indonesia | SeaCV';
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -58,123 +58,6 @@ $pageTitle = 'Berita, Info Lowongan & Edukasi Karir Indonesia | SeaCV';
         a {
             text-decoration: none;
             color: inherit;
-        }
-
-        /* Top Navbar */
-        .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 6%;
-            transition: var(--transition);
-        }
-
-        .brand-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .brand-logo-img {
-            width: 38px;
-            height: 38px;
-            object-fit: contain;
-            border-radius: 8px;
-        }
-
-        .brand-text h1 {
-            font-family: var(--font-heading);
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: var(--text-main);
-            letter-spacing: -0.5px;
-            line-height: 1.1;
-        }
-
-        .brand-text span {
-            font-size: 0.72rem;
-            font-weight: 600;
-            color: var(--primary);
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 22px;
-        }
-
-        .nav-link-item {
-            font-size: 0.92rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            transition: var(--transition);
-            position: relative;
-            padding: 6px 2px;
-        }
-
-        .nav-link-item:hover,
-        .nav-link-item.active {
-            color: var(--primary);
-        }
-
-        .nav-link-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2.5px;
-            background: var(--primary);
-            border-radius: 2px;
-        }
-
-        .nav-cta-btn {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: #ffffff !important;
-            padding: 9px 20px !important;
-            border-radius: var(--radius-pill);
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
-        }
-
-        .nav-cta-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .btn-back-home {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            padding: 8px 18px;
-            border-radius: var(--radius-pill);
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: var(--text-main);
-            transition: var(--transition);
-        }
-
-        .btn-back-home:hover {
-            background: var(--primary-light);
-            border-color: #bfdbfe;
-            color: var(--primary);
-            transform: translateY(-1px);
         }
 
         /* Hero Banner Section (Batik Megamendung Theme) */
@@ -688,17 +571,169 @@ $pageTitle = 'Berita, Info Lowongan & Edukasi Karir Indonesia | SeaCV';
 
         @media (max-width: 768px) {
             .nav-links { display: none; }
-            .article-hero { padding: 40px 18px 50px; }
-            .article-hero h2 { font-size: 1.7rem; }
-            .article-hero p { font-size: 0.92rem; }
-            .filter-section { margin-top: -16px; padding: 0 14px; }
-            .filter-card { flex-direction: column; align-items: stretch; gap: 10px; }
-            .filter-pills-wrap { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 6px; }
-            .filter-pill { white-space: nowrap; }
-            .articles-grid { grid-template-columns: 1fr; gap: 20px; }
-            .article-cta-box { flex-direction: column; text-align: center; padding: 28px 20px; }
-            .article-cta-btn { width: 100%; justify-content: center; }
-            body { padding-bottom: 74px; }
+            body { padding-bottom: calc(65px + env(safe-area-inset-bottom, 0px)); }
+
+            /* Compact & Sleek Hero Section on Mobile */
+            .article-hero {
+                padding: 22px 14px 24px;
+                border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+            }
+            .hero-badge {
+                font-size: 0.65rem;
+                padding: 4px 10px;
+                margin-bottom: 8px;
+                letter-spacing: 0.03em;
+                gap: 5px;
+            }
+            .article-hero h2 {
+                font-size: 1.25rem;
+                line-height: 1.25;
+                margin-bottom: 6px;
+                letter-spacing: -0.3px;
+            }
+            .article-hero p {
+                font-size: 0.8rem;
+                line-height: 1.45;
+                color: #94a3b8;
+                margin-bottom: 14px;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            .search-bar-wrap {
+                max-width: 100%;
+            }
+            .search-form {
+                padding: 4px 4px 4px 14px;
+                border-radius: 24px;
+                height: 44px;
+            }
+            .search-form input {
+                font-size: 0.84rem;
+                min-width: 0;
+            }
+            .search-form button {
+                padding: 8px 14px;
+                font-size: 0.8rem;
+                gap: 4px;
+                border-radius: 20px;
+                flex-shrink: 0;
+            }
+
+            /* Compact Horizontal Filter Chips */
+            .filter-section {
+                margin-top: 0;
+                padding: 10px 14px 4px;
+            }
+            .filter-card {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+                padding: 8px 12px;
+                border-radius: 12px;
+                background: #ffffff;
+                border: 1px solid #e2e8f0;
+                box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+            }
+            .filter-pills-wrap {
+                display: flex;
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                gap: 6px;
+                padding-bottom: 4px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .filter-pills-wrap::-webkit-scrollbar {
+                display: none;
+            }
+            .filter-pill {
+                white-space: nowrap;
+                flex-shrink: 0;
+                padding: 6px 13px;
+                font-size: 0.78rem;
+                border-radius: 20px;
+            }
+            .filter-stats-text {
+                font-size: 0.74rem;
+                color: #64748b;
+                padding-top: 4px;
+                border-top: 1px dashed #f1f5f9;
+            }
+
+            /* Article Grid & Cards */
+            .main-container {
+                padding: 12px 14px 20px;
+            }
+            .articles-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                margin-bottom: 30px;
+            }
+            .article-card {
+                border-radius: 14px;
+            }
+            .card-thumb-wrap {
+                aspect-ratio: 16 / 9;
+            }
+            .card-body {
+                padding: 16px;
+            }
+            .card-category-badge {
+                top: 10px;
+                left: 10px;
+                font-size: 0.68rem;
+                padding: 3px 9px;
+            }
+            .card-title {
+                font-size: 1.05rem;
+                line-height: 1.35;
+                margin-bottom: 6px;
+            }
+            .card-excerpt {
+                font-size: 0.82rem;
+                line-height: 1.5;
+                margin-bottom: 12px;
+                -webkit-line-clamp: 2;
+            }
+            .card-footer {
+                padding-top: 10px;
+            }
+            .card-author {
+                font-size: 0.78rem;
+            }
+            .card-author-avatar {
+                width: 22px;
+                height: 22px;
+                font-size: 0.65rem;
+            }
+            .card-read-more {
+                font-size: 0.8rem;
+            }
+
+            /* CTA Box on Mobile */
+            .article-cta-box {
+                flex-direction: column;
+                text-align: center;
+                padding: 22px 16px;
+                border-radius: 14px;
+                margin-bottom: 30px;
+            }
+            .article-cta-content h3 {
+                font-size: 1.2rem;
+                margin-bottom: 6px;
+            }
+            .article-cta-content p {
+                font-size: 0.82rem;
+                margin-bottom: 16px;
+            }
+            .article-cta-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 11px 18px;
+                font-size: 0.88rem;
+            }
 
             /* Mobile Bottom Bar (5 Tabs) */
             .mobile-bottom-bar {
@@ -756,41 +791,18 @@ $pageTitle = 'Berita, Info Lowongan & Edukasi Karir Indonesia | SeaCV';
 </head>
 <body>
 
-    <!-- Top Navigation Bar (5 Menu) -->
-    <nav class="navbar">
-        <a href="index.php" class="brand-logo">
-            <img src="logo.png" alt="SeaCV Logo" class="brand-logo-img" />
-            <div class="brand-text">
-                <h1>SEACV</h1>
-                <span>Professional Hub</span>
-            </div>
-        </a>
-
-        <div class="nav-links">
-            <a href="index.php#katalog-layanan" class="nav-link-item nav-cta-btn">Mulai Beli!</a>
-            <a href="index.php#keunggulan" class="nav-link-item">Keunggulan</a>
-            <a href="index.php#cara-pemesanan" class="nav-link-item">Cara Pemesanan</a>
-            <a href="index.php#testimoni" class="nav-link-item">Testimoni</a>
-            <a href="artikel.php" class="nav-link-item active">Berita &amp; Artikel</a>
-        </div>
-
-        <div class="nav-actions">
-            <a href="index.php" class="btn-back-home">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                <span>Kembali ke Beranda</span>
-            </a>
-        </div>
-    </nav>
+    <!-- Top Navigation Bar (Shared navbar.php Component) -->
+    <?php require __DIR__ . '/../../navbar.php'; ?>
 
     <!-- Hero Header -->
     <header class="article-hero">
         <div class="article-hero-content">
             <div class="hero-badge">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                <span>PUSAT EDUKASI KARIR &amp; INFO LOKER INDONESIA</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <span>PUSAT EDUKASI KARIR &amp; LOKER</span>
             </div>
             <h2>Berita Karir, Info Loker &amp; Panduan Sukses Kerja</h2>
-            <p>Eksplorasi wawasan seputar lowongan pekerjaan di Indonesia, tips tembus HRD, perbedaan mendalam CV ATS vs Kreatif, serta checklist syarat berkas lamaran kerja.</p>
+            <p>Wawasan lowongan kerja Indonesia, rahasia HRD, panduan CV ATS vs Kreatif, dan syarat berkas lamaran.</p>
 
             <!-- Search Bar Form -->
             <div class="search-bar-wrap">
@@ -798,9 +810,9 @@ $pageTitle = 'Berita, Info Lowongan & Edukasi Karir Indonesia | SeaCV';
                     <?php if (!empty($selectedCategory) && $selectedCategory !== 'Semua'): ?>
                         <input type="hidden" name="category" value="<?= htmlspecialchars($selectedCategory) ?>">
                     <?php endif; ?>
-                    <input type="text" name="search" placeholder="Cari topik loker, tips CV, HRD, wawancara..." value="<?= htmlspecialchars($searchQuery) ?>" />
+                    <input type="text" name="search" placeholder="Cari topik loker, tips CV..." value="<?= htmlspecialchars($searchQuery) ?>" />
                     <button type="submit">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                         <span>Cari</span>
                     </button>
                 </form>

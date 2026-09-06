@@ -3217,30 +3217,8 @@
     <div class="scroll-progress-bar" id="scrollProgressBar"></div>
 
     <!-- Top Navigation Bar -->
-    <nav class="navbar">
-        <a href="index.php" class="brand-logo">
-            <img src="logo.png" alt="SeaCV Logo" class="brand-logo-img" />
-            <div class="brand-text">
-                <h1>SEACV</h1>
-                <span>Professional Hub</span>
-            </div>
-        </a>
-
-        <div class="nav-links">
-            <a href="#katalog-layanan" class="nav-link-item nav-cta-btn">Mulai Beli!</a>
-            <a href="#keunggulan" class="nav-link-item">Keunggulan</a>
-            <a href="#cara-pemesanan" class="nav-link-item">Cara Pemesanan</a>
-            <a href="#testimoni" class="nav-link-item">Testimoni</a>
-            <a href="artikel.php" class="nav-link-item">Berita &amp; Artikel</a>
-        </div>
-
-        <div class="nav-actions">
-            <button type="button" class="cart-pill-btn" onclick="toggleCartDrawer()">
-                <span class="cart-label-text">Pesanan Saya</span>
-                <span class="cart-badge" id="cartBadgeCount">0</span>
-            </button>
-        </div>
-    </nav>
+    <!-- Top Navigation Bar (Shared navbar.php Component) -->
+    <?php require __DIR__ . '/../../navbar.php'; ?>
 
     <!-- Hero Showcase Slider -->
     <section class="hero-section">
@@ -4737,8 +4715,16 @@
             }
 
             window.addEventListener('scroll', updateActiveTab, { passive: true });
-            updateActiveTab();
         })();
+
+        // Auto Open Cart Drawer if redirected from other pages with ?open_cart=1
+        if (new URLSearchParams(window.location.search).has('open_cart')) {
+            setTimeout(function() {
+                if (typeof toggleCartDrawer === 'function') {
+                    toggleCartDrawer();
+                }
+            }, 350);
+        }
 
         // ============================================================
         // Animated Counter for Trust Stats Bar

@@ -14,7 +14,7 @@ $pageTitle = $article['title'] . ' | SeaCV';
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -58,123 +58,6 @@ $pageTitle = $article['title'] . ' | SeaCV';
         a {
             text-decoration: none;
             color: inherit;
-        }
-
-        /* Top Navbar */
-        .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 6%;
-            transition: var(--transition);
-        }
-
-        .brand-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .brand-logo-img {
-            width: 38px;
-            height: 38px;
-            object-fit: contain;
-            border-radius: 8px;
-        }
-
-        .brand-text h1 {
-            font-family: var(--font-heading);
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: var(--text-main);
-            letter-spacing: -0.5px;
-            line-height: 1.1;
-        }
-
-        .brand-text span {
-            font-size: 0.72rem;
-            font-weight: 600;
-            color: var(--primary);
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 22px;
-        }
-
-        .nav-link-item {
-            font-size: 0.92rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            transition: var(--transition);
-            position: relative;
-            padding: 6px 2px;
-        }
-
-        .nav-link-item:hover,
-        .nav-link-item.active {
-            color: var(--primary);
-        }
-
-        .nav-link-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2.5px;
-            background: var(--primary);
-            border-radius: 2px;
-        }
-
-        .nav-cta-btn {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: #ffffff !important;
-            padding: 9px 20px !important;
-            border-radius: var(--radius-pill);
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
-        }
-
-        .nav-cta-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .btn-back-home {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            padding: 8px 18px;
-            border-radius: var(--radius-pill);
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: var(--text-main);
-            transition: var(--transition);
-        }
-
-        .btn-back-home:hover {
-            background: var(--primary-light);
-            border-color: #bfdbfe;
-            color: var(--primary);
-            transform: translateY(-1px);
         }
 
         /* Detail Container */
@@ -566,13 +449,115 @@ $pageTitle = $article['title'] . ' | SeaCV';
 
         @media (max-width: 768px) {
             .nav-links { display: none; }
-            .article-main-card { padding: 24px 18px; }
-            .detail-title { font-size: 1.5rem; }
-            .article-content { font-size: 0.98rem; }
-            .related-grid { grid-template-columns: 1fr; }
-            .article-cta-box { flex-direction: column; text-align: center; padding: 24px 18px; }
-            .article-cta-btn { width: 100%; justify-content: center; }
-            body { padding-bottom: 74px; }
+            body { padding-bottom: calc(65px + env(safe-area-inset-bottom, 0px)); }
+
+            .detail-wrapper {
+                margin: 16px auto 36px;
+                padding: 0 14px;
+            }
+            .article-main-card {
+                padding: 18px 14px;
+                border-radius: 14px;
+            }
+            .breadcrumbs {
+                font-size: 0.78rem;
+                margin-bottom: 12px;
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            .detail-header {
+                margin-bottom: 16px;
+            }
+            .detail-badge {
+                font-size: 0.68rem;
+                padding: 3px 10px;
+                margin-bottom: 8px;
+            }
+            .detail-title {
+                font-size: 1.3rem;
+                line-height: 1.3;
+                margin-bottom: 10px;
+            }
+            .detail-meta {
+                flex-wrap: wrap;
+                gap: 8px;
+                font-size: 0.76rem;
+            }
+            .detail-featured-img {
+                border-radius: 10px;
+                margin-bottom: 18px;
+            }
+            .article-content {
+                font-size: 0.94rem;
+                line-height: 1.7;
+            }
+            .article-content h2 {
+                font-size: 1.18rem;
+                margin: 22px 0 8px;
+            }
+            .article-content h3 {
+                font-size: 1.05rem;
+                margin: 18px 0 6px;
+            }
+            .article-content p {
+                margin-bottom: 14px;
+            }
+            .callout-box {
+                padding: 14px;
+                border-radius: 10px;
+                margin: 18px 0;
+            }
+            .checklist-box {
+                padding: 14px;
+                border-radius: 10px;
+                margin: 18px 0;
+            }
+            .checklist-item {
+                font-size: 0.88rem;
+                gap: 8px;
+            }
+            .share-bar-wrap {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 16px 0 0;
+            }
+            .share-buttons {
+                width: 100%;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .btn-share {
+                justify-content: center;
+                width: 100%;
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+            .related-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+            .article-cta-box {
+                flex-direction: column;
+                text-align: center;
+                padding: 22px 16px;
+                border-radius: 14px;
+            }
+            .article-cta-content h3 {
+                font-size: 1.2rem;
+                margin-bottom: 6px;
+            }
+            .article-cta-content p {
+                font-size: 0.82rem;
+                margin-bottom: 16px;
+            }
+            .article-cta-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 11px 18px;
+                font-size: 0.88rem;
+            }
 
             .mobile-bottom-bar {
                 display: flex;
@@ -628,31 +613,8 @@ $pageTitle = $article['title'] . ' | SeaCV';
 </head>
 <body>
 
-    <!-- Top Navigation Bar (5 Menu) -->
-    <nav class="navbar">
-        <a href="index.php" class="brand-logo">
-            <img src="logo.png" alt="SeaCV Logo" class="brand-logo-img" />
-            <div class="brand-text">
-                <h1>SEACV</h1>
-                <span>Professional Hub</span>
-            </div>
-        </a>
-
-        <div class="nav-links">
-            <a href="index.php#katalog-layanan" class="nav-link-item nav-cta-btn">Mulai Beli!</a>
-            <a href="index.php#keunggulan" class="nav-link-item">Keunggulan</a>
-            <a href="index.php#cara-pemesanan" class="nav-link-item">Cara Pemesanan</a>
-            <a href="index.php#testimoni" class="nav-link-item">Testimoni</a>
-            <a href="artikel.php" class="nav-link-item active">Berita &amp; Artikel</a>
-        </div>
-
-        <div class="nav-actions">
-            <a href="artikel.php" class="btn-back-home">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                <span>Semua Artikel</span>
-            </a>
-        </div>
-    </nav>
+    <!-- Top Navigation Bar (Shared navbar.php Component) -->
+    <?php require __DIR__ . '/../../navbar.php'; ?>
 
     <!-- Detail Wrapper -->
     <div class="detail-wrapper">
